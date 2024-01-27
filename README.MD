@@ -1,28 +1,53 @@
 # 小羊试驾SheeDrive_开发文档
 
-<img src="..\程序截图\title_SheeDrive.png" width="80%" height="auto">
+<img src="./custom/images/SheeDrive_logo_title.png" width="80%" height="auto">
 
 > 本文档建立于 2024-01-25 ，用于记录本人毕业设计的开发过程
 
-## 数据库设计
-1. 使用 MySQL 创建名为`sheedrive`的数据库，字符集采用`utf8mb4_general_ci`
+## 快速体验
+0. 准备 Go 语言和 GoFrame 的开发环境
 
-<img src="..\程序截图\PixPin_2024-01-23_08-52-48.png" width="40%" height="auto">
+1. 从 github 克隆项目代码到你的`GOPATH`的`src`目录下
+```bash
+# https
+git clone https://github.com/1354478648/SheeDrive.git
+# ssh
+git clone git@github.com:1354478648/SheeDrive.git
+```
 
-2. 运行如下 SQL 代码，建表并插入测试数据
+2. 使用 MySQL 创建名为`sheedrive`的数据库，字符集采用`utf8mb4_general_ci`
+
+<img src="./custom/images/建库.png" width="40%" height="auto">
+
+3. 在项目代码中找到`custom/sql`目录，运行`SheeDrive.sql`SQL脚本，创建项目所需的数据表和初始化数据
+
+4. 在项目代码中找到`manifest`目录，创建`config/config.yaml`配置文件，并配置数据库连接等内容，示例配置如下：
+```yaml
+server:
+  address: ":8000"
+  openapiPath: "/api.json"
+  swaggerPath: "/swagger"
+
+database:
+  link: "mysql:root:2002@tcp(127.0.0.1:3306)/sheedrive?loc=Local&parseTime=true"
+
+logger:
+  level: "all"
+  stdout: true
+```
+
+5. 在项目目录下使用`gf run main.go`命令运行项目
+
+## 后端接口开发过程
+本系统的后端使用基于 Go 语言的 GoFrame 框架开发
+### 准备工作
+下面简单介绍准备工作，详细操作省略：
+1. 下载安装 Go 语言开发环境，并配置环境变量
+2. 下载安装 GoFrame 框架
+3. 使用 MySQL 创建名为`sheedrive`的数据库，字符集采用`utf8mb4_general_ci`
+4. 运行如下 SQL 代码，创建项目所需的数据表和初始化数据
+
 ```sql
-/*
-SheeDrive小羊试驾 数据库
-
-Author: 汤晟
-Date: 2024-01-23
-
-Note: 
-1. 用户表、订单表、地址表使用雪花算法，其他表的主键都自增
-2. 用户手机号将作为用户名
-3. 因为现实场景需要驾驶证等信息，用户姓名和身份证号为必填项，并且可以通过切字符串的形式获取性别和生日
-4. 经销商主营可以通过limit库存表获得
-*/
 USE `sheedrive`;
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -227,21 +252,13 @@ CREATE TABLE `comment` (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='评价表';
 ```
 
-## 后端接口开发
-后端使用基于 Go 语言的 GoFrame 框架开发
-### 准备工作
-下面简单介绍准备工作，详细操作省略：
-1. 安装 Go 语言开发环境，并配置环境变量
-2. 安装 GoFrame 框架
-3. 修改 Go 语言开发环境
-
 ### 创建项目
-在指定目录下使用如下命令初始化项目，指定项目名称`sheedrive`
+在`GOPATH`的`src`目录下使用如下命令初始化项目，指定项目名称`sheedrive`
 ```bash
 gf init sheedrive -u
 ```
 
-1. 使用 VSCode 打开项目，删除`api`、`controller`中自动生成的文件，删除`cmd.go`中的路由绑定
+1. 使用 VSCode 打开项目，删除`api`、`controller`中自动生成的文件，删除`cmd.go`中默认的路由绑定
 
 2. 添加依赖的库：`mysql`驱动和`jwt`
 ```bash
@@ -263,7 +280,6 @@ import (
 database:
   link: "mysql:root:2002@tcp(127.0.0.1:3306)/sheedrive?loc=Local&parseTime=true"
 ```
-
 
 ### 代码生成
 数据库相关的操作与数据结构放在`dao`与`model`中。在GoFrame中，`dao`与`model`的内容可以自动生成
@@ -330,8 +346,7 @@ gf gen dao
 |库存管理|分页查询库存|管理员进入“库存管理”菜单项或执行增删改操作后，执行分页查询库存列表|
 |库存管理|关键字查询库存|管理员在“库存管理”菜单项的查询输入框中填入搜索关键字，查询指定库存列表|
 
-#### API数据结构
-在`api/admin/admin.go`中编写 API 数据结构
+
 
 
 
