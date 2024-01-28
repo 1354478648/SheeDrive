@@ -31,9 +31,6 @@ type DealerColumns struct {
 	CreateTime   string // 创建时间
 	UpdateTime   string // 更新时间
 	DeleteTime   string // 删除时间
-	CreateUser   string // 创建人
-	UpdateUser   string // 修改人
-	DeleteUser   string // 删除人
 }
 
 // dealerColumns holds the columns for table dealer.
@@ -49,9 +46,6 @@ var dealerColumns = DealerColumns{
 	CreateTime:   "create_time",
 	UpdateTime:   "update_time",
 	DeleteTime:   "delete_time",
-	CreateUser:   "create_user",
-	UpdateUser:   "update_user",
-	DeleteUser:   "delete_user",
 }
 
 // NewDealerDao creates and returns a new DAO object for table data access.

@@ -28,8 +28,6 @@ type CommentColumns struct {
 	CarScore    string // 汽车评分 1~5星
 	CreateTime  string // 创建时间
 	DeleteTime  string // 删除时间
-	CreateUser  string // 创建人
-	DeleteUser  string // 删除人
 }
 
 // commentColumns holds the columns for table comment.
@@ -42,8 +40,6 @@ var commentColumns = CommentColumns{
 	CarScore:    "car_score",
 	CreateTime:  "create_time",
 	DeleteTime:  "delete_time",
-	CreateUser:  "create_user",
-	DeleteUser:  "delete_user",
 }
 
 // NewCommentDao creates and returns a new DAO object for table data access.

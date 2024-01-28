@@ -27,12 +27,10 @@ type AdminColumns struct {
 	Avatar     string // 头像
 	Phone      string // 手机号
 	Status     string // 状态 0:禁用, 1:正常
+	IsRoot     string // 是否是超级管理员 0:否, 1:是
 	CreateTime string // 创建时间
 	UpdateTime string // 更新时间
 	DeleteTime string // 删除时间
-	CreateUser string // 创建人
-	UpdateUser string // 修改人
-	DeleteUser string // 删除人
 }
 
 // adminColumns holds the columns for table admin.
@@ -44,12 +42,10 @@ var adminColumns = AdminColumns{
 	Avatar:     "avatar",
 	Phone:      "phone",
 	Status:     "status",
+	IsRoot:     "isRoot",
 	CreateTime: "create_time",
 	UpdateTime: "update_time",
 	DeleteTime: "delete_time",
-	CreateUser: "create_user",
-	UpdateUser: "update_user",
-	DeleteUser: "delete_user",
 }
 
 // NewAdminDao creates and returns a new DAO object for table data access.

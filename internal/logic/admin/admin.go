@@ -4,7 +4,6 @@ import (
 	"SheeDrive/internal/dao"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/model/do"
-	"SheeDrive/internal/model/entity"
 	"SheeDrive/internal/service"
 	"context"
 
@@ -22,14 +21,16 @@ func init() {
 }
 
 // Login implements service.IAdmin.
-func (*iAdmin) Login(ctx context.Context, username string, password string) (admin *entity.Admin, err error) {
+func (*iAdmin) Login(ctx context.Context, in model.AdminLoginInput) (out *model.AdminLoginOutput, err error) {
+	// 实例化响应结构体
+	out = &model.AdminLoginOutput{}
 	err = dao.Admin.Ctx(ctx).Where(do.Admin{
-		Username: username,
-		Password: password,
-	}).Scan(&admin)
+		Username: in.Username,
+		Password: in.Password,
+	}).Scan(&out.AdminBase)
 
-	if admin == nil {
-		err = gerror.New("用户名或密码不正确")
+	if err != nil {
+		return nil, gerror.New("用户名或密码不正确")
 	}
 
 	return
@@ -78,24 +79,7 @@ func (*iAdmin) GetList(ctx context.Context, in model.AdminGetListInput) (out *mo
 	if err := md.Scan(&adminList); err != nil {
 		return out, err
 	}
-	// 为CreateUserName字段赋值
-	for i, admin := range adminList {
-		createUser, err := service.Admin().GetById(ctx, admin.CreateUser)
-		if err != nil {
-			return out, err
-		}
-		adminList[i].CreateUserName = createUser.Name
-	}
 	out.Items = adminList
-
-	return
-}
-
-// GetById implements service.IAdmin.
-func (*iAdmin) GetById(ctx context.Context, id int64) (admin *entity.Admin, err error) {
-	err = dao.Admin.Ctx(ctx).Where(do.Admin{
-		Id: id,
-	}).Scan(&admin)
 
 	return
 }

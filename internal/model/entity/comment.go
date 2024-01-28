@@ -18,6 +18,4 @@ type Comment struct {
 	CarScore    int         `json:"carScore"    ` // 汽车评分 1~5星
 	CreateTime  *gtime.Time `json:"createTime"  ` // 创建时间
 	DeleteTime  *gtime.Time `json:"deleteTime"  ` // 删除时间
-	CreateUser  int64       `json:"createUser"  ` // 创建人
-	DeleteUser  int64       `json:"deleteUser"  ` // 删除人
 }

@@ -25,7 +25,4 @@ type CarDetail struct {
 	CreateTime   *gtime.Time `json:"createTime"   ` // 创建时间
 	UpdateTime   *gtime.Time `json:"updateTime"   ` // 更新时间
 	DeleteTime   *gtime.Time `json:"deleteTime"   ` // 删除时间
-	CreateUser   int64       `json:"createUser"   ` // 创建人
-	UpdateUser   int64       `json:"updateUser"   ` // 修改人
-	DeleteUser   int64       `json:"deleteUser"   ` // 删除人
 }

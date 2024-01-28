@@ -1,7 +1,7 @@
 package api
 
 import (
-	"SheeDrive/internal/model/entity"
+	"SheeDrive/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -15,8 +15,8 @@ type AdminLoginReq struct {
 }
 
 type AdminLoginRes struct {
-	Token string        `json:"token" dc:"验证token"`
-	Admin *entity.Admin `json:"admin_info"`
+	Token     string          `json:"token" dc:"验证token"`
+	AdminInfo model.AdminBase `json:"admin_info" dc:"管理员信息"`
 }
 
 // 管理员列表分页与关键字查询
@@ -33,4 +33,9 @@ type AdminGetListReq struct {
 
 type AdminGetListRes struct {
 	CommonPaginationRes
+}
+
+// 添加管理员
+type AdminAddReq struct {
+	g.Meta `path:"/add" method:"post"`
 }

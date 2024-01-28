@@ -20,34 +20,38 @@ type OrderDao struct {
 
 // OrderColumns defines and stores column names for table order.
 type OrderColumns struct {
-	Id         string // 主键ID
-	UserId     string // 用户ID
-	DealerId   string // 经销商ID
-	CarId      string // 车辆ID
-	AddrId     string // 用户地址ID
-	Status     string // 订单状态 -1:异常,0:取消,1:未确认,2:已确认,3:签署协议,4:试驾中,5:试驾结束,6:待评价,7:已评价
-	CreateTime string // 创建时间
-	UpdateTime string // 更新时间
-	DeleteTime string // 删除时间
-	CreateUser string // 创建人
-	UpdateUser string // 修改人
-	DeleteUser string // 删除人
+	Id          string // 主键ID
+	UserId      string // 用户ID
+	DealerId    string // 经销商ID
+	CarId       string // 车辆ID
+	AddrId      string // 用户地址ID
+	Status      string // 订单状态 -1:异常,0:取消,1:未确认,2:已确认,3:签署协议,4:试驾中,5:试驾结束,6:待评价,7:已评价
+	ConfirmTime string // 确认时间
+	SignTime    string // 签署协议时间
+	StartTime   string // 试驾开始时间
+	EndTime     string // 试驾结束时间
+	CommentTime string // 评价时间
+	CreateTime  string // 创建时间
+	UpdateTime  string // 更新时间
+	DeleteTime  string // 删除时间
 }
 
 // orderColumns holds the columns for table order.
 var orderColumns = OrderColumns{
-	Id:         "id",
-	UserId:     "user_id",
-	DealerId:   "dealer_id",
-	CarId:      "car_id",
-	AddrId:     "addr_id",
-	Status:     "status",
-	CreateTime: "create_time",
-	UpdateTime: "update_time",
-	DeleteTime: "delete_time",
-	CreateUser: "create_user",
-	UpdateUser: "update_user",
-	DeleteUser: "delete_user",
+	Id:          "id",
+	UserId:      "user_id",
+	DealerId:    "dealer_id",
+	CarId:       "car_id",
+	AddrId:      "addr_id",
+	Status:      "status",
+	ConfirmTime: "confirm_time",
+	SignTime:    "sign_time",
+	StartTime:   "start_time",
+	EndTime:     "end_time",
+	CommentTime: "comment_time",
+	CreateTime:  "create_time",
+	UpdateTime:  "update_time",
+	DeleteTime:  "delete_time",
 }
 
 // NewOrderDao creates and returns a new DAO object for table data access.

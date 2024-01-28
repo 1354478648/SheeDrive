@@ -27,7 +27,4 @@ type CarDetail struct {
 	CreateTime   *gtime.Time // 创建时间
 	UpdateTime   *gtime.Time // 更新时间
 	DeleteTime   *gtime.Time // 删除时间
-	CreateUser   interface{} // 创建人
-	UpdateUser   interface{} // 修改人
-	DeleteUser   interface{} // 删除人
 }

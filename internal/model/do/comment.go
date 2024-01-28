@@ -20,6 +20,4 @@ type Comment struct {
 	CarScore    interface{} // 汽车评分 1~5星
 	CreateTime  *gtime.Time // 创建时间
 	DeleteTime  *gtime.Time // 删除时间
-	CreateUser  interface{} // 创建人
-	DeleteUser  interface{} // 删除人
 }

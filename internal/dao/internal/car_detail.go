@@ -35,9 +35,6 @@ type CarDetailColumns struct {
 	CreateTime   string // 创建时间
 	UpdateTime   string // 更新时间
 	DeleteTime   string // 删除时间
-	CreateUser   string // 创建人
-	UpdateUser   string // 修改人
-	DeleteUser   string // 删除人
 }
 
 // carDetailColumns holds the columns for table car_detail.
@@ -57,9 +54,6 @@ var carDetailColumns = CarDetailColumns{
 	CreateTime:   "create_time",
 	UpdateTime:   "update_time",
 	DeleteTime:   "delete_time",
-	CreateUser:   "create_user",
-	UpdateUser:   "update_user",
-	DeleteUser:   "delete_user",
 }
 
 // NewCarDetailDao creates and returns a new DAO object for table data access.

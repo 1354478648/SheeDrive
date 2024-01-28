@@ -2,54 +2,30 @@ package admin
 
 import (
 	apiAdmin "SheeDrive/api"
-	"SheeDrive/internal/consts"
 	"SheeDrive/internal/model"
-	"SheeDrive/internal/model/entity"
 	"SheeDrive/internal/service"
+	"SheeDrive/utility"
 	"context"
-	"time"
-
-	"github.com/golang-jwt/jwt/v5"
 )
 
 var AdminController = &cAdmin{}
 
 type cAdmin struct{}
 
-// 生成Token
-func jwtToken(admin *entity.Admin) string {
-	claim := jwt.RegisteredClaims{
-		Subject: admin.Username,
-		// 设置过期时间
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
-	}
-
-	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claim).SignedString([]byte(consts.JwtTokenKey))
-
-	if err != nil {
-		panic("Token生成错误！")
-	}
-
-	return token
-}
-
 // 管理员登录
 func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (res *apiAdmin.AdminLoginRes, err error) {
 	// 调用Service层接口
-	admin, err := service.Admin().Login(ctx, req.Username, req.Password)
+	admin, err := service.Admin().Login(ctx, model.AdminLoginInput{
+		Username: req.Username,
+		Password: req.Password,
+	})
 	// 返回Token和管理员基本信息
 	if err != nil {
 		return nil, err
 	}
 	res = &apiAdmin.AdminLoginRes{
-		Token: jwtToken(admin),
-		Admin: &entity.Admin{
-			Id:       admin.Id,
-			Name:     admin.Name,
-			Username: admin.Username,
-			Avatar:   admin.Avatar,
-			Phone:    admin.Phone,
-		},
+		Token:     utility.GenToken(admin.Username),
+		AdminInfo: admin.AdminBase,
 	}
 	return
 }
