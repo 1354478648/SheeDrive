@@ -13,6 +13,8 @@ type IAdmin interface {
 	Add(ctx context.Context, in model.AdminAddInput) (out *model.AdminAddOutput, err error)
 	Update(ctx context.Context, in model.AdminUpdateInput) (err error)
 	Delete(ctx context.Context, in model.AdminDeleteInput) (err error)
+	UpdateStatus(ctx context.Context, in model.AdminUpdateStatusInput) (err error)
+	UpdatePassword(ctx context.Context, in model.AdminUpdatePasswordInput) (err error)
 }
 
 // 2. 定义接口变量

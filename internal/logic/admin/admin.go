@@ -22,6 +22,21 @@ func init() {
 	service.RegisterAdmin(New())
 }
 
+// 局部公共方法：判断管理员是否具有超级权限
+func isRoot(ctx context.Context, adminId int64) (err error) {
+	adminInfo, err := service.Admin().GetById(ctx, model.AdminGetByIdInput{Id: adminId})
+	if err != nil {
+		return gerror.New("该管理员不存在")
+	}
+	if adminInfo.IsRoot == 1 {
+		return gerror.New("无法修改系统管理员")
+	}
+	if adminInfo.IsRoot == 0 {
+		return nil
+	}
+	return
+}
+
 // Login implements service.IAdmin.
 func (*iAdmin) Login(ctx context.Context, in model.AdminLoginInput) (out *model.AdminLoginOutput, err error) {
 	// 实例化响应结构体
@@ -133,6 +148,12 @@ func (*iAdmin) Add(ctx context.Context, in model.AdminAddInput) (out *model.Admi
 
 // Update implements service.IAdmin.
 func (*iAdmin) Update(ctx context.Context, in model.AdminUpdateInput) (err error) {
+	// 判断管理员是否具有超级权限
+	err = isRoot(ctx, in.Id)
+	if err != nil {
+		return err
+	}
+
 	// 执行修改操作
 	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(
 		do.Admin{
@@ -148,10 +169,73 @@ func (*iAdmin) Update(ctx context.Context, in model.AdminUpdateInput) (err error
 
 // Delete implements service.IAdmin.
 func (*iAdmin) Delete(ctx context.Context, in model.AdminDeleteInput) (err error) {
+	// 判断管理员是否具有超级权限
+	err = isRoot(ctx, in.Id)
+	if err != nil {
+		return err
+	}
+
 	// 执行删除操作
 	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Delete()
 	if err != nil {
 		return gerror.New("删除管理员失败")
+	}
+	return
+}
+
+// UpdateStatus implements service.IAdmin.
+func (*iAdmin) UpdateStatus(ctx context.Context, in model.AdminUpdateStatusInput) (err error) {
+	// 判断管理员是否具有超级权限
+	err = isRoot(ctx, in.Id)
+	if err != nil {
+		return err
+	}
+
+	// 获取管理员原状态
+	id := in.Id
+	adminInfo, err := service.Admin().GetById(ctx, model.AdminGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("该管理员不存在")
+	}
+	// 切换管理员状态
+	switch adminInfo.Status {
+	case 0:
+		_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(do.Admin{Status: 1}).Update()
+		if err != nil {
+			return gerror.New("管理员状态切换失败")
+		}
+	case 1:
+		_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(do.Admin{Status: 0}).Update()
+		if err != nil {
+			return gerror.New("管理员状态切换失败")
+		}
+	}
+	return
+}
+
+// UpdatePassword implements service.IAdmin.
+func (*iAdmin) UpdatePassword(ctx context.Context, in model.AdminUpdatePasswordInput) (err error) {
+	// 判断管理员是否具有超级权限
+	err = isRoot(ctx, in.Id)
+	if err != nil {
+		return err
+	}
+
+	// 获取原密码
+	oldPassword, err := dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Value(dao.Admin.Columns().Password)
+	if err != nil {
+		return gerror.New("获取密码失败")
+	}
+
+	// 验证原密码
+	if utility.EncryptPassword(in.OldPassword) != oldPassword.String() {
+		return gerror.New("新旧密码不一致")
+	}
+
+	// 更新密码
+	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(do.Admin{Password: utility.EncryptPassword(in.NewPassword)}).Update()
+	if err != nil {
+		return gerror.New("更新密码失败")
 	}
 	return
 }

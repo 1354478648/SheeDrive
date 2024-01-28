@@ -78,3 +78,22 @@ type AdminDeleteReq struct {
 }
 
 type AdminDeleteRes struct{}
+
+// 修改管理员状态
+type AdminUpdateStatusReq struct {
+	g.Meta `path:"/updateStatus" method:"put"`
+	Id     int64 `p:"id" v:"required#请输入Id" dc:"id"`
+}
+
+type AdminUpdateStatusRes struct{}
+
+// 修改管理员密码
+type AdminUpdatePasswordReq struct {
+	g.Meta          `path:"/updatePassword" method:"put"`
+	Id              int64  `p:"id" v:"required#请输入Id" dc:"id"`
+	Password        string `p:"password" v:"required|different:NewPassword#请输入原密码|原密码不可与新密码一致" dc:"原密码"`
+	NewPassword     string `p:"newPassword" v:"required|password|same:ConfirmPassword#请输入新密码|密码格式不正确（任意可见字符，长度在6~18之间）|两次密码输入不一致" dc:"新密码"`
+	ConfirmPassword string `p:"confirmPassword" v:"required|password|same:NewPassword#请输入确认密码|密码格式不正确（任意可见字符，长度在6~18之间）|两次密码输入不一致" dc:"确认密码"`
+}
+
+type AdminUpdatePasswordRes struct{}

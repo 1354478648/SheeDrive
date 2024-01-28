@@ -79,3 +79,13 @@ type AdminUpdateInput struct {
 type AdminDeleteInput struct {
 	Id int64
 }
+
+type AdminUpdateStatusInput struct {
+	Id int64
+}
+
+type AdminUpdatePasswordInput struct {
+	Id          int64
+	OldPassword string
+	NewPassword string
+}

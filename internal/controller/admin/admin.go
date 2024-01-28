@@ -117,3 +117,30 @@ func (c *cAdmin) AdminDelete(ctx context.Context, req *apiAdmin.AdminDeleteReq) 
 	}
 	return
 }
+
+// 管理员状态修改
+func (c *cAdmin) AdminUpdateStatus(ctx context.Context, req *apiAdmin.AdminUpdateStatusReq) (res *apiAdmin.AdminUpdateStatusRes, err error) {
+	// 调用service接口
+	err = service.Admin().UpdateStatus(ctx, model.AdminUpdateStatusInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// 管理员密码修改
+func (c *cAdmin) AdminUpdatePassword(ctx context.Context, req *apiAdmin.AdminUpdatePasswordReq) (res *apiAdmin.AdminUpdatePasswordRes, err error) {
+	// 调用service接口
+	err = service.Admin().UpdatePassword(ctx, model.AdminUpdatePasswordInput{
+		Id:          req.Id,
+		OldPassword: req.Password,
+		NewPassword: req.NewPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
