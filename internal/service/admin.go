@@ -10,6 +10,7 @@ import (
 type IAdmin interface {
 	Login(ctx context.Context, username string, password string) (admin *entity.Admin, err error)
 	GetList(ctx context.Context, in model.AdminGetListInput) (out *model.AdminGetListOutput, err error)
+	GetById(ctx context.Context, id int64) (admin *entity.Admin, err error)
 }
 
 // 2. 定义接口变量

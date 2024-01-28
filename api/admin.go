@@ -19,7 +19,7 @@ type AdminLoginRes struct {
 	Admin *entity.Admin `json:"admin_info"`
 }
 
-// 管理员查询
+// 管理员列表分页与关键字查询
 type AdminGetListReq struct {
 	g.Meta `path:"/list" method:"get"`
 	CommonPaginationReq
@@ -27,11 +27,10 @@ type AdminGetListReq struct {
 	Username string `p:"username" dc:"用户名"`
 	Name     string `p:"name" dc:"姓名"`
 	// 校验规则required-with表示当指定字段有值时，该字段也必须有值
-	BeforeDate *gtime.Time `p:"before_time" v:"datetime|required-with:AfterDate#请输入正确的日期格式|请输入完整日期" dc:"前时间"`
-	AfterDate  *gtime.Time `p:"after_time" v:"datetime|required-with:BeforeDate#请输入正确的日期格式|请输入完整日期" dc:"后时间"`
+	BeforeDate *gtime.Time `p:"before_date" v:"required-with:AfterDate|datetime#请输入完整日期|请输入正确的日期格式" dc:"前时间"`
+	AfterDate  *gtime.Time `p:"after_date" v:"required-with:BeforeDate|datetime#请输入完整日期|请输入正确的日期格式" dc:"后时间"`
 }
 
 type AdminGetListRes struct {
-	AdminList []*entity.Admin `json:"admin_info"`
 	CommonPaginationRes
 }

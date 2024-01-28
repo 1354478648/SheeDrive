@@ -57,7 +57,7 @@ func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (r
 // 管理员查询
 func (c *cAdmin) GetAdminList(ctx context.Context, req *apiAdmin.AdminGetListReq) (res *apiAdmin.AdminGetListRes, err error) {
 	// 调用service层接口
-	adminList, err := service.Admin().GetList(ctx, model.AdminGetListInput{
+	out, err := service.Admin().GetList(ctx, model.AdminGetListInput{
 		Page:       req.CommonPaginationReq.Page,
 		PageSize:   req.CommonPaginationReq.Size,
 		Username:   req.Username,
@@ -65,16 +65,15 @@ func (c *cAdmin) GetAdminList(ctx context.Context, req *apiAdmin.AdminGetListReq
 		BeforeDate: req.BeforeDate,
 		AfterDate:  req.AfterDate,
 	})
-
 	if err != nil {
 		return nil, err
 	}
 	res = &apiAdmin.AdminGetListRes{
-		AdminList: adminList.Items,
 		CommonPaginationRes: apiAdmin.CommonPaginationRes{
-			Page:  req.Page,
-			Size:  req.Size,
-			Total: adminList.Total,
+			Page:  out.Page,
+			Size:  out.PageSize,
+			Total: out.Total,
+			List:  out.Items,
 		},
 	}
 	return

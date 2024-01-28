@@ -37,50 +37,65 @@ func (*iAdmin) Login(ctx context.Context, username string, password string) (adm
 
 // GetAdminList implements service.IAdmin.
 func (*iAdmin) GetList(ctx context.Context, in model.AdminGetListInput) (out *model.AdminGetListOutput, err error) {
-	// 初始化out
-	out = &model.AdminGetListOutput{}
+	// 1. 实例化响应结构体
+	out = &model.AdminGetListOutput{
+		Page:     in.Page,
+		PageSize: in.PageSize,
+	}
+	// 2. 获取*gdb.Model对象
 	var (
-		model = dao.Admin.Ctx(ctx)
+		md = dao.Admin.Ctx(ctx)
 	)
 
-	// 构造动态SQL语句
-	// 判断是否有关键字Username查询
+	// 3. 通过md构造动态SQL语句
+	// 3.1 判断是否有关键字Username查询
 	if in.Username != "" {
-		model = model.Where(dao.Admin.Columns().Username, in.Username)
+		md = md.Where(dao.Admin.Columns().Username, in.Username)
 	}
-	// 判断是否有关键字Name查询
+	// 3.2 判断是否有关键字Name查询
 	if in.Name != "" {
-		model = model.WhereLike(dao.Admin.Columns().Name, "%"+in.Name+"%")
+		md = md.WhereLike(dao.Admin.Columns().Name, "%"+in.Name+"%")
 	}
-	// 判断是否有关键字BeforeDate和AfterDate查询
+	// 3.3 判断是否有关键字BeforeDate和AfterDate查询
 	if (in.BeforeDate != nil) && (in.AfterDate != nil) {
-		model = model.WhereBetween(dao.Admin.Columns().CreateTime, in.BeforeDate, in.AfterDate)
+		md = md.WhereBetween(dao.Admin.Columns().CreateTime, in.BeforeDate, in.AfterDate)
 	}
 
+	// 4. 执行分页查询
 	// 设置排序：更新时间降序
-	model = model.OrderDesc(dao.Admin.Columns().UpdateTime)
+	md = md.OrderDesc(dao.Admin.Columns().UpdateTime)
 	// 设置分页
-	model = model.Page(in.Page, in.PageSize)
-	// 执行查询
-	var adminList []*entity.Admin
-	if err := model.Scan(&adminList); err != nil {
+	md = md.Page(in.Page, in.PageSize)
+
+	// 5. 判断当前页的数据条数
+	out.Total, err = md.Count()
+	if err != nil || out.Total == 0 {
 		return out, err
 	}
-	// 判断是否查出数据
-	if len(adminList) == 0 {
+
+	// 6. 将查询结果赋值给响应结构体
+	var adminList []model.AdminBase
+	if err := md.Scan(&adminList); err != nil {
 		return out, err
 	}
-	// 将密码字段置为空字符串
-	for _, admin := range adminList {
-		admin.Password = ""
+	// 为CreateUserName字段赋值
+	for i, admin := range adminList {
+		createUser, err := service.Admin().GetById(ctx, admin.CreateUser)
+		if err != nil {
+			return out, err
+		}
+		adminList[i].CreateUserName = createUser.Name
 	}
 	out.Items = adminList
 
-	// 计算当前页的数据条数
-	out.Total, err = model.Count()
-	if err != nil {
-		return out, err
-	}
+	return
+}
+
+// GetById implements service.IAdmin.
+func (*iAdmin) GetById(ctx context.Context, id int64) (admin *entity.Admin, err error) {
+	err = dao.Admin.Ctx(ctx).Where(do.Admin{
+		Id: id,
+	}).Scan(&admin)
 
 	return
 }

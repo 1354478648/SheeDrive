@@ -6,7 +6,8 @@ type CommonPaginationReq struct {
 }
 
 type CommonPaginationRes struct {
-	Page  int `dc:"分页号码，默认1"`
-	Size  int `dc:"分页数量，最大50"`
-	Total int `dc:"总数"`
+	Page  int         `dc:"分页号码，默认1"`
+	Size  int         `dc:"分页数量，最大50"`
+	Total int         `dc:"总数"`
+	List  interface{} `dc:"列表数据"`
 }
