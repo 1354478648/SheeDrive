@@ -4,7 +4,8 @@ import (
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
-type AdminBase struct {
+// 管理员信息基类
+type AdminInfoBase struct {
 	Id       int64  `json:"id"         ` // 主键ID
 	Name     string `json:"name"       ` // 姓名
 	Username string `json:"username"   ` // 用户名
@@ -18,6 +19,13 @@ type AdminBase struct {
 	DeleteTime *gtime.Time `json:"deleteTime" ` // 删除时间
 }
 
+// 管理员添加修改基类
+type AdminAddUpdateBase struct {
+	Name     string `json:"name"       ` // 姓名
+	Username string `json:"username"   ` // 用户名
+	Phone    string `json:"phone"      ` // 手机号
+}
+
 // AdminLoginInput 管理员登录
 type AdminLoginInput struct {
 	Username string
@@ -26,7 +34,7 @@ type AdminLoginInput struct {
 
 // AdminLoginOutput 管理员登录结果
 type AdminLoginOutput struct {
-	AdminBase
+	AdminInfoBase
 }
 
 // AdminGetListInput 分页与关键字查询管理员列表
@@ -41,8 +49,33 @@ type AdminGetListInput struct {
 
 // AdminGetListOutput 分页与关键字查询管理员列表结果
 type AdminGetListOutput struct {
-	Page     int         `json:"page"`
-	PageSize int         `json:"page_size"`
-	Total    int         `json:"total"`
-	Items    []AdminBase `json:"items"`
+	Page     int             `json:"page"`
+	PageSize int             `json:"page_size"`
+	Total    int             `json:"total"`
+	Items    []AdminInfoBase `json:"items"`
+}
+
+type AdminGetByIdInput struct {
+	Id int64
+}
+
+type AdminGetByIdOutput struct {
+	AdminInfoBase
+}
+
+type AdminAddInput struct {
+	AdminAddUpdateBase
+}
+
+type AdminAddOutput struct {
+	Id int64
+}
+
+type AdminUpdateInput struct {
+	Id int64
+	AdminAddUpdateBase
+}
+
+type AdminDeleteInput struct {
+	Id int64
 }

@@ -25,12 +25,12 @@ func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (r
 	}
 	res = &apiAdmin.AdminLoginRes{
 		Token:     utility.GenToken(admin.Username),
-		AdminInfo: admin.AdminBase,
+		AdminInfo: admin.AdminInfoBase,
 	}
 	return
 }
 
-// 管理员查询
+// 管理员列表查询
 func (c *cAdmin) GetAdminList(ctx context.Context, req *apiAdmin.AdminGetListReq) (res *apiAdmin.AdminGetListRes, err error) {
 	// 调用service层接口
 	out, err := service.Admin().GetList(ctx, model.AdminGetListInput{
@@ -51,6 +51,69 @@ func (c *cAdmin) GetAdminList(ctx context.Context, req *apiAdmin.AdminGetListReq
 			Total: out.Total,
 			List:  out.Items,
 		},
+	}
+	return
+}
+
+// 通过Id查询管理员
+func (c *cAdmin) AdminGetById(ctx context.Context, req *apiAdmin.AdminGetByIdReq) (res *apiAdmin.AdminGetByIdRes, err error) {
+	// 调用service层接口
+	out, err := service.Admin().GetById(ctx, model.AdminGetByIdInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiAdmin.AdminGetByIdRes{
+		AdminInfo: out.AdminInfoBase,
+	}
+	return
+}
+
+// 管理员添加
+func (c *cAdmin) AdminAdd(ctx context.Context, req *apiAdmin.AdminAddReq) (res *apiAdmin.AdminAddRes, err error) {
+	// 调用service层接口
+	out, err := service.Admin().Add(ctx, model.AdminAddInput{
+		AdminAddUpdateBase: model.AdminAddUpdateBase{
+			Name:     req.Name,
+			Username: req.Username,
+			Phone:    req.Phone,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiAdmin.AdminAddRes{
+		Id: out.Id,
+	}
+	return
+}
+
+// 管理员修改
+func (c *cAdmin) AdminUpdate(ctx context.Context, req *apiAdmin.AdminUpdateReq) (res *apiAdmin.AdminUpdateRes, err error) {
+	// 调用service层接口
+	err = service.Admin().Update(ctx, model.AdminUpdateInput{
+		Id: req.Id,
+		AdminAddUpdateBase: model.AdminAddUpdateBase{
+			Name:     req.Name,
+			Username: req.Username,
+			Phone:    req.Phone,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// 管理员删除
+func (c *cAdmin) AdminDelete(ctx context.Context, req *apiAdmin.AdminDeleteReq) (res *apiAdmin.AdminDeleteRes, err error) {
+	// 调用service接口
+	err = service.Admin().Delete(ctx, model.AdminDeleteInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
 	}
 	return
 }

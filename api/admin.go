@@ -15,8 +15,8 @@ type AdminLoginReq struct {
 }
 
 type AdminLoginRes struct {
-	Token     string          `json:"token" dc:"验证token"`
-	AdminInfo model.AdminBase `json:"admin_info" dc:"管理员信息"`
+	Token     string              `json:"token" dc:"验证token"`
+	AdminInfo model.AdminInfoBase `json:"admin_info" dc:"管理员信息"`
 }
 
 // 管理员列表分页与关键字查询
@@ -27,15 +27,54 @@ type AdminGetListReq struct {
 	Username string `p:"username" dc:"用户名"`
 	Name     string `p:"name" dc:"姓名"`
 	// 校验规则required-with表示当指定字段有值时，该字段也必须有值
-	BeforeDate *gtime.Time `p:"before_date" v:"required-with:AfterDate|datetime#请输入完整日期|请输入正确的日期格式" dc:"前时间"`
-	AfterDate  *gtime.Time `p:"after_date" v:"required-with:BeforeDate|datetime#请输入完整日期|请输入正确的日期格式" dc:"后时间"`
+	// 校验规则before-equal（或after-equal）表示判断该日期是否与指定日期相等或在指定日期之前（或之后）
+	BeforeDate *gtime.Time `p:"before_date" v:"required-with:AfterDate|datetime|before-equal:AfterDate#请输入完整日期|请输入正确的日期格式|请注意前后日期顺序" dc:"前时间"`
+	AfterDate  *gtime.Time `p:"after_date" v:"required-with:BeforeDate|datetime|after-equal:BeforeDate#请输入完整日期|请输入正确的日期格式|请注意前后日期顺序" dc:"后时间"`
 }
 
 type AdminGetListRes struct {
 	CommonPaginationRes
 }
 
+// 通过Id查询管理员
+type AdminGetByIdReq struct {
+	g.Meta `path:"/detail" method:"get"`
+	Id     int64 `p:"id" v:"required#请输入Id" dc:"id"`
+}
+
+type AdminGetByIdRes struct {
+	AdminInfo model.AdminInfoBase `json:"admin_info" dc:"管理员信息"`
+}
+
 // 添加管理员
 type AdminAddReq struct {
 	g.Meta `path:"/add" method:"post"`
+	Name   string `p:"name" v:"required#请输入姓名" dc:"姓名"`
+	// 校验规则passport表示通用帐号规则（字母开头，只能包含字母、数字和下划线，长度在6~18之间）
+	Username string `p:"username" v:"required|passport#请输入用户名|请输入正确的用户名格式（字母开头，只能包含字母、数字和下划线，长度在6~18之间）"`
+	Phone    string `P:"phone" v:"required|phone#请输入手机号码|请输入争取的手机号码格式"`
 }
+
+type AdminAddRes struct {
+	Id int64 `json:"id" dc:"主键id"`
+}
+
+// 修改管理员
+type AdminUpdateReq struct {
+	g.Meta `path:"/update" method:"put"`
+	Id     int64  `p:"id" v:"required#请输入Id" dc:"id"`
+	Name   string `p:"name" v:"required#请输入姓名" dc:"姓名"`
+	// 校验规则passport表示通用帐号规则（字母开头，只能包含字母、数字和下划线，长度在6~18之间）
+	Username string `p:"username" v:"required|passport#请输入用户名|请输入正确的用户名格式（字母开头，只能包含字母、数字和下划线，长度在6~18之间）"`
+	Phone    string `P:"phone" v:"required|phone#请输入手机号码|请输入争取的手机号码格式"`
+}
+
+type AdminUpdateRes struct{}
+
+// 删除管理员
+type AdminDeleteReq struct {
+	g.Meta `path:"/delete" method:"delete"`
+	Id     int64 `p:"id" v:"required#请输入Id" dc:"id"`
+}
+
+type AdminDeleteRes struct{}

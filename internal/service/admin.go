@@ -9,6 +9,10 @@ import (
 type IAdmin interface {
 	Login(ctx context.Context, in model.AdminLoginInput) (out *model.AdminLoginOutput, err error)
 	GetList(ctx context.Context, in model.AdminGetListInput) (out *model.AdminGetListOutput, err error)
+	GetById(ctx context.Context, in model.AdminGetByIdInput) (out *model.AdminGetByIdOutput, err error)
+	Add(ctx context.Context, in model.AdminAddInput) (out *model.AdminAddOutput, err error)
+	Update(ctx context.Context, in model.AdminUpdateInput) (err error)
+	Delete(ctx context.Context, in model.AdminDeleteInput) (err error)
 }
 
 // 2. 定义接口变量
