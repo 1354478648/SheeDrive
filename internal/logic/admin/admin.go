@@ -239,3 +239,19 @@ func (*iAdmin) UpdatePassword(ctx context.Context, in model.AdminUpdatePasswordI
 	}
 	return
 }
+
+// ResetPassword implements service.IAdmin.
+func (*iAdmin) ResetPassword(ctx context.Context, in model.AdminResetPasswordInput) (err error) {
+	// 判断管理员是否具有超级权限
+	err = isRoot(ctx, in.Id)
+	if err != nil {
+		return err
+	}
+
+	// 重置密码\
+	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(do.Admin{Password: utility.EncryptPassword(consts.DefaultPassword)}).Update()
+	if err != nil {
+		return gerror.New("重置密码失败")
+	}
+	return
+}

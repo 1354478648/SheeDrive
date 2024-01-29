@@ -89,3 +89,7 @@ type AdminUpdatePasswordInput struct {
 	OldPassword string
 	NewPassword string
 }
+
+type AdminResetPasswordInput struct {
+	Id int64
+}

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"SheeDrive/internal/controller/admin"
+	"SheeDrive/internal/controller/dealer"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -20,6 +21,9 @@ var (
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Group("/admin", func(group *ghttp.RouterGroup) {
 					group.Bind(admin.AdminController)
+				})
+				group.Group("/dealer", func(group *ghttp.RouterGroup) {
+					group.Bind(dealer.DealerController)
 				})
 			})
 			s.Run()

@@ -1,7 +1,8 @@
 package admin
 
 import (
-	apiAdmin "SheeDrive/api"
+	"SheeDrive/api"
+	apiAdmin "SheeDrive/api/admin"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/service"
 	"SheeDrive/utility"
@@ -45,7 +46,7 @@ func (c *cAdmin) GetAdminList(ctx context.Context, req *apiAdmin.AdminGetListReq
 		return nil, err
 	}
 	res = &apiAdmin.AdminGetListRes{
-		CommonPaginationRes: apiAdmin.CommonPaginationRes{
+		CommonPaginationRes: api.CommonPaginationRes{
 			Page:  out.Page,
 			Size:  out.PageSize,
 			Total: out.Total,
@@ -137,6 +138,19 @@ func (c *cAdmin) AdminUpdatePassword(ctx context.Context, req *apiAdmin.AdminUpd
 		Id:          req.Id,
 		OldPassword: req.Password,
 		NewPassword: req.NewPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
+
+// 管理员密码重置
+func (c *cAdmin) AdminResetPassword(ctx context.Context, req *apiAdmin.AdminResetPasswordReq) (res *apiAdmin.AdminResetPasswordRes, err error) {
+	// 调用service接口
+	err = service.Admin().ResetPassword(ctx, model.AdminResetPasswordInput{
+		Id: req.Id,
 	})
 	if err != nil {
 		return nil, err
