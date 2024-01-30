@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"SheeDrive/api"
 	apiAdmin "SheeDrive/api/admin"
+	apiPagination "SheeDrive/api/pagination"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/service"
 	"SheeDrive/utility"
@@ -46,7 +46,7 @@ func (c *cAdmin) GetAdminList(ctx context.Context, req *apiAdmin.AdminGetListReq
 		return nil, err
 	}
 	res = &apiAdmin.AdminGetListRes{
-		CommonPaginationRes: api.CommonPaginationRes{
+		CommonPaginationRes: apiPagination.CommonPaginationRes{
 			Page:  out.Page,
 			Size:  out.PageSize,
 			Total: out.Total,

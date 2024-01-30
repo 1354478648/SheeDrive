@@ -1,7 +1,7 @@
 package admin
 
 import (
-	"SheeDrive/api"
+	"SheeDrive/api/pagination"
 	"SheeDrive/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -23,7 +23,7 @@ type AdminLoginRes struct {
 // 管理员列表分页与关键字查询
 type AdminGetListReq struct {
 	g.Meta `path:"/list" method:"get"`
-	api.CommonPaginationReq
+	pagination.CommonPaginationReq
 	// 关键字查询可选字段
 	Username string `p:"username" dc:"用户名"`
 	Name     string `p:"name" dc:"姓名"`
@@ -34,7 +34,7 @@ type AdminGetListReq struct {
 }
 
 type AdminGetListRes struct {
-	api.CommonPaginationRes
+	pagination.CommonPaginationRes
 }
 
 // 通过Id查询管理员

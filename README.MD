@@ -308,8 +308,8 @@ gf gen dao
 
 
 
-### 文件上传下载接口
-本系统借助阿里云 OSS 对象存储来完成文件的上传下载功能
+### 文件上传接口
+本系统借助阿里云 OSS 对象存储来完成文件的上传功能
 
 #### 开通服务
 登录阿里云平台，在产品中找到对象存储 OSS后，进入管理控制台创建 Bucket，参考设置如下：
@@ -374,31 +374,182 @@ echo %OSS_ACCESS_KEY_SECRET%
 
 <img src="./custom/images/PixPin_2024-01-29_15-31-20.png" width="80%" height="auto">
 
+#### 创建存储空间
+1. 在`utility`中创建工具类`aliOSS.go`，仿照官方文档提供的示例代码，将创建`OSSClient`实例的代码抽离出来做局部方法
+```go
+import (
+	"SheeDrive/internal/consts"
+	"fmt"
+	"os"
 
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+)
 
+func handleError(err error) {
+	fmt.Println("Error:", err)
+	os.Exit(-1)
+}
 
+// 创建OSSClient实例
+func initOSSClient() (bucket *oss.Bucket, err error) {
+	// 存储空间名称
+	bucketName := consts.BucketName
 
+	// 从环境变量中获取访问凭证
+	provider, err := oss.NewEnvironmentVariableCredentialsProvider()
+	if err != nil {
+		handleError(err)
+	}
 
+	// 创建OSSClient实例。
+	// Endpoint
+	client, err := oss.New("https://"+consts.EndpointName, "", "", oss.SetCredentialsProvider(&provider))
+	if err != nil {
+		handleError(err)
+	}
 
+	// 获取存储空间
+	bucket, err = client.Bucket(bucketName)
+	if err != nil {
+		handleError(err)
+	}
 
+	return
+}
+```
 
+其中，存储空间名称和地域节点名称可以从阿里云OSS控制台中找到，这里将其定义在`consts`中
 
+#### 实现上传接口
+GoFrame 提供了非常方便的表单文件上传功能，下面使用规范路由的形式接收上传文件
 
+1. 定义API接口
+```go
+import (
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/net/ghttp"
+)
 
+type FileUploadReq struct {
+	g.Meta `path:"/upload" method:"post" mime:"multipart/form-data"`
+	File   *ghttp.UploadFile `p:"file" type:"file" dc:"上传文件"`
+}
 
+type FileUploadRes struct {
+	Url string `json:"url" dc:"文件路径"`
+}
+```
+参数接收的数据类型使用`*ghttp.UploadFile`
 
+2. 实现控制层接口
+```go
+import (
+	apiFile "SheeDrive/api/file"
+	"SheeDrive/internal/consts"
+	"SheeDrive/utility"
+	"context"
+	"os"
+	"path"
 
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
+)
 
+var FileController = &cFile{}
 
+type cFile struct{}
 
+// 单文件上传
+func (c *cFile) FileUpload(ctx context.Context, req *apiFile.FileUploadReq) (res *apiFile.FileUploadRes, err error) {
+	const (
+		tempLocalPath    = consts.TempLocalPath
+		imagesObjectName = consts.ImagesObjectName
+	)
 
+	// 获取文件
+	file := req.File
+	// 判断文件是否为空
+	if file == nil {
+		return nil, gerror.NewCode(gcode.CodeMissingParameter, "请选择需要上传的文件")
+	}
 
+	// 生成UUID防止文件重名
+	// path.Ext方法能够获取文件扩展名
+	file.Filename = utility.GenStrUUID() + path.Ext(file.Filename)
 
+	// 先将文件临时存到本地中
+	fileName, err := file.Save(tempLocalPath)
+	if err != nil {
+		return nil, err
+	}
 
+	url := utility.UploadFile(imagesObjectName+fileName, tempLocalPath+fileName)
 
+	// 删除本地临时文件
+	err = os.RemoveAll(tempLocalPath)
+	if err != nil {
+		return nil, err
+	}
 
+	// 定义返回结构体
+	res = &apiFile.FileUploadRes{
+		Url: url,
+	}
 
+	return
+}
+```
+其中两个常量：`TempLocalPath`表示本地临时文件存储的路径，可以放在`temp/`里，由于该路径在`.gitignore`中，能够防止被 Git 上传到公开网站中；`ImagesObjectName`表示文件存储在 OSS 存储空间的目标路径，可以写根路径
 
+另外在工具类中定义了生成 UUID 的方法，内容如下：
+```go
+import (
+	"github.com/google/uuid"
+)
+
+func GenStrUUID() (id string) {
+	id = uuid.New().String()
+	return
+}
+
+func GenIntUUID() (id int64) {
+	id = int64(uuid.New().ID())
+	return
+}
+```
+需要先在终端中输入命令安装外部库
+```bash
+go get github.com/google/uuid
+```
+
+3. 参考官方文档的示例代码，具体实现上传文件工具类接口
+```go
+// 上传文件
+func UploadFile(objectName, localFileName string) (url string) {
+	bucket, err := initOSSClient()
+	if err != nil {
+		handleError(err)
+	}
+	err = bucket.PutObjectFromFile(objectName, localFileName)
+	if err != nil {
+		handleError(err)
+	}
+	url = fmt.Sprintf("https://%s.%s/%s", consts.BucketName, consts.EndpointName, objectName)
+	return
+}
+```
+`PutObjectFromFile`方法需要两个参数，第一个是存储空间的目标存储路径，第二个是本地文件路径
+
+最后，返回的`url`是有规律的，可以通过拼接的方式获取
+
+#### 路由绑定
+`internal/cmd/cmd.go`
+
+```go
+group.Group("/file", func(group *ghttp.RouterGroup) {
+	group.Bind(file.FileController)
+})
+```
 
 
 

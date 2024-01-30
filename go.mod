@@ -3,12 +3,15 @@ module SheeDrive
 go 1.18
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
 	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.6.2
 	github.com/gogf/gf/v2 v2.6.2
+	github.com/google/uuid v1.6.0
 )
 
 require (
-	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible // indirect
+	github.com/clbanning/mxj v1.8.5-0.20200714211355-ff02cfb8ea28 // indirect
+	github.com/gomodule/redigo v1.8.5 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
 
