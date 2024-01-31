@@ -1,6 +1,10 @@
 package model
 
-import "github.com/gogf/gf/v2/os/gtime"
+import (
+	"SheeDrive/internal/model/do"
+
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
 // 经销商信息基类
 type DealerInfoBase struct {
@@ -15,6 +19,8 @@ type DealerInfoBase struct {
 	CreateTime   *gtime.Time `json:"createTime" ` // 创建时间
 	UpdateTime   *gtime.Time `json:"updateTime" ` // 更新时间
 	DeleteTime   *gtime.Time `json:"deleteTime" ` // 删除时间
+
+	Address *do.Address `orm:"with:belong_id=id" json:"address"`
 }
 
 // 经销商添加修改基类
@@ -32,4 +38,17 @@ type DealerLoginInput struct {
 
 type DealerLoginOutput struct {
 	DealerInfoBase
+}
+
+type DealerGetListInput struct {
+	Page     int
+	PageSize int
+	Name     string
+}
+
+type DealerGetListOutput struct {
+	Page     int              `json:"page"`
+	PageSize int              `json:"page_size"`
+	Total    int              `json:"total"`
+	Items    []DealerInfoBase `json:"items"`
 }

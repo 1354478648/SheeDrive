@@ -93,3 +93,8 @@ type AdminUpdatePasswordInput struct {
 type AdminResetPasswordInput struct {
 	Id int64
 }
+
+type AdminUpdateAvatarInput struct {
+	Id  int64
+	Url string
+}

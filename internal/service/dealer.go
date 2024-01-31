@@ -8,7 +8,7 @@ import (
 // 1. 定义接口
 type IDealer interface {
 	Login(ctx context.Context, in model.DealerLoginInput) (out *model.DealerLoginOutput, err error)
-	// GetList(ctx context.Context, in model.DealerGetListInput) (out *model.DealerLoginOutput, , err error)
+	GetList(ctx context.Context, in model.DealerGetListInput) (out *model.DealerGetListOutput, err error)
 	// Add(ctx context.Context, in model.DealerAddInput) (out *model.DealerAddOutput, err error)
 	// Update(ctx context.Context, in model.DealerUpdateInput) (err error)
 	// Delete(ctx context.Context, in model.DealerDeleteInput) (err error)

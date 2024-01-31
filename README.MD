@@ -302,11 +302,354 @@ gfcli:
 gf gen dao
 ```
 
+### 设计思想
+在具体实现每个功能前，需要解释下本项目的设计思想，比如代码分层设计、数据模型设计等等。当然，绝大多数还是需要基于官方文档的说明，但是官方文档又很少提供示例代码，编写标准好用的接口缺少参考，因此最终还是结合官方文档和社区示例项目代码才真正使本项目具有规范的设计思想
+
+基于官方文档提供的代码分层、数据模型、业务模型等说明，本系统的总体设计框架如下图所示：
+
+<img src="./custom/images/PixPin_2024-01-31_10-04-32.png" width="50%" height="auto">
+
+下面对图中出现的内容进行细节上的解释
+
+#### 路由绑定与转发
+路由绑定与转发由`cmd`负责，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 管理员相关接口
+管理员相关接口共11个，包括：登录、分页关键字查询、通过ID查询、添加、删除、信息修改、状态切换、密码修改、密码重置
+#### 登录
+1. 编写 API 数据结构
+`api/admin/admin.go`
+```go
+// 管理员登录
+type AdminLoginReq struct {
+	g.Meta   `path:"/login" method:"post"`
+	Username string `p:"username" v:"required#请输入用户名" dc:"用户名"`
+	Password string `p:"password" v:"required#请输入密码" dc:"密码"`
+}
 
+type AdminLoginRes struct {
+	Token     string              `json:"token" dc:"验证token"`
+	AdminInfo model.AdminInfoBase `json:"admin_info" dc:"管理员信息"`
+}
+```
 
+2. 编写控制层框架及路由绑定
+`internal/controller/admin/admin.go`
+```go
+package admin
 
+import (
+	apiAdmin "SheeDrive/api/admin"
+	apiPagination "SheeDrive/api/pagination"
+	"SheeDrive/internal/model"
+	"SheeDrive/internal/service"
+	"SheeDrive/utility"
+	"context"
+)
 
+var AdminController = &cAdmin{}
+
+type cAdmin struct{}
+
+// 管理员登录
+func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (res *apiAdmin.AdminLoginRes, err error) {
+	return
+}
+```
+`internal/cmd/cmd.go`
+```go
+group.Group("/admin", func(group *ghttp.RouterGroup) {
+	group.Bind(admin.AdminController)
+})
+```
+
+3. 设计管理员的业务层框架
+`internal/service/admin.go`
+```go
+package service
+
+import (
+	"SheeDrive/internal/model"
+	"context"
+)
+
+// 1. 定义接口
+type IAdmin interface {
+	Login(ctx context.Context, in model.AdminLoginInput) (out *model.AdminLoginOutput, err error)
+}
+
+// 2. 定义接口变量
+var localAdmin IAdmin
+
+// 3. 定义获取接口实例的函数
+func Admin() IAdmin {
+	if localAdmin == nil {
+		panic("接口IAdmin未实现或未注册")
+	}
+	return localAdmin
+}
+
+// 4. 定义接口实现的注册方法
+func RegisterAdmin(i IAdmin) {
+	localAdmin = i
+}
+```
+
+4. 定义业务模型
+此处并不希望将敏感数据，比如密码也返回给前端，因此我们可以额外地自定义实体类模型来指定返回的字段
+`internal/model/admin.go`
+```go
+// 管理员信息基类
+type AdminInfoBase struct {
+	Id       int64  `json:"id"         ` // 主键ID
+	Name     string `json:"name"       ` // 姓名
+	Username string `json:"username"   ` // 用户名
+	// Password   string      `json:"password"   ` // 密码
+	Avatar     string      `json:"avatar"     ` // 头像
+	Phone      string      `json:"phone"      ` // 手机号
+	Status     int         `json:"status"     ` // 状态 0:禁用, 1:正常
+	IsRoot     int         `json:"isRoot"     ` // 是否是超级管理员 0:否, 1:是
+	CreateTime *gtime.Time `json:"createTime" ` // 创建时间
+	UpdateTime *gtime.Time `json:"updateTime" ` // 更新时间
+	DeleteTime *gtime.Time `json:"deleteTime" ` // 删除时间
+}
+
+// AdminLoginInput 管理员登录
+type AdminLoginInput struct {
+	Username string
+	Password string
+}
+
+// AdminLoginOutput 管理员登录结果
+type AdminLoginOutput struct {
+	AdminInfoBase
+}
+```
+
+5. 实现业务接口
+`internal/logic/admin/admin.go`
+```go
+package admin
+
+import (
+	"SheeDrive/internal/consts"
+	"SheeDrive/internal/dao"
+	"SheeDrive/internal/model"
+	"SheeDrive/internal/model/do"
+	"SheeDrive/internal/service"
+	"SheeDrive/utility"
+	"context"
+
+	"github.com/gogf/gf/v2/errors/gerror"
+)
+
+type iAdmin struct{}
+
+func New() *iAdmin {
+	return &iAdmin{}
+}
+
+func init() {
+	service.RegisterAdmin(New())
+}
+
+// Login implements service.IAdmin.
+func (*iAdmin) Login(ctx context.Context, in model.AdminLoginInput) (out *model.AdminLoginOutput, err error) {
+	// 实例化响应结构体
+	out = &model.AdminLoginOutput{}
+
+	err = dao.Admin.Ctx(ctx).Where(do.Admin{
+		Username: in.Username,
+		Password: utility.EncryptPassword(in.Password),
+	}).Scan(&out.AdminInfoBase)
+	if err != nil {
+		return nil, gerror.New("用户名或密码不正确")
+	}
+
+	// 判断管理员状态是否被禁用
+	if out.AdminInfoBase.Status == 0 {
+		return nil, gerror.New("该管理员已被禁用")
+	}
+
+	return
+}
+```
+其中，定义了工具类`EncryptPassword`，具体内容如下：
+```go
+package utility
+
+import "github.com/gogf/gf/crypto/gmd5"
+
+// 密码加密（不加盐）
+func EncryptPassword(password string) string {
+	return gmd5.MustEncryptString(gmd5.MustEncryptString(password))
+}
+```
+
+6. 对接口实现进行初始化导入
+`internal/logic/logic.go`
+```go
+package logic
+
+import (
+	_ "SheeDrive/internal/logic/admin"
+)
+```
+在`main.go`中对`logic`进行初始化导入
+```go
+import (
+    _ "gfbook/internal/logic"
+)
+```
+
+7. 完成控制层代码
+`internal/controller/admin/admin.go`
+```go
+// 管理员登录
+func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (res *apiAdmin.AdminLoginRes, err error) {
+	// 调用Service层接口
+	admin, err := service.Admin().Login(ctx, model.AdminLoginInput{
+		Username: req.Username,
+		Password: req.Password,
+	})
+	// 返回Token和管理员基本信息
+	if err != nil {
+		return nil, err
+	}
+	res = &apiAdmin.AdminLoginRes{
+		Token:     utility.GenToken(admin.Username),
+		AdminInfo: admin.AdminInfoBase,
+	}
+	return
+}
+```
+其中，定义了工具类`GenToken`用于生成Token，具体代码如下（需要导入`jwt`）：
+```go
+import (
+	"SheeDrive/internal/consts"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
+)
+
+// 生成Token
+func GenToken(username string) string {
+	claim := jwt.RegisteredClaims{
+		Subject: username,
+		// 设置过期时间
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+	}
+
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claim).SignedString([]byte(consts.JwtTokenKey))
+
+	if err != nil {
+		panic("Token生成错误！")
+	}
+
+	return token
+}
+```
+`JwtTokenKey`从常量中获取，是字符串即可
+
+8. 添加登录验证中间件
+`internal/service/middware.go`
+```go
+import "github.com/gogf/gf/v2/net/ghttp"
+
+type IMiddleware interface {
+	Auth(r *ghttp.Request)
+}
+
+var localMiddleware IMiddleware
+
+func Middleware() IMiddleware {
+	if localMiddleware == nil {
+		panic("IMiddleware接口未实现或未注册")
+	}
+	return localMiddleware
+}
+
+func RegisterMiddleware(i IMiddleware) {
+	localMiddleware = i
+}
+```
+`internal/logic/middleware/middleware.go`
+```go
+import (
+	"SheeDrive/internal/consts"
+	"SheeDrive/internal/service"
+
+	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/golang-jwt/jwt/v5"
+)
+
+type iMiddleware struct{}
+
+func New() *iMiddleware { return &iMiddleware{} }
+
+func init() {
+	service.RegisterMiddleware(New())
+}
+
+// Auth implements service.IMiddleware.
+func (*iMiddleware) Auth(r *ghttp.Request) {
+	var res *ghttp.DefaultHandlerResponse
+	tokenStr := r.Header.Get("Authorization")
+	if tokenStr == "" {
+		res = &ghttp.DefaultHandlerResponse{
+			Code:    403,
+			Message: "请先登录",
+		}
+	} else {
+		token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+			return []byte(consts.JwtTokenKey), nil
+		})
+
+		if err != nil || !token.Valid {
+			res = &ghttp.DefaultHandlerResponse{
+				Code:    403,
+				Message: "身份验证已过期，请重新登录",
+			}
+		}
+	}
+	if res != nil {
+		r.Response.WriteJsonExit(res)
+	}
+	r.Middleware.Next()
+}
+```
+`internal/logic/logic.go`
+```go
+package logic
+
+import (
+	_ "SheeDrive/internal/logic/admin"
+	_ "SheeDrive/internal/logic/middleware"
+)
+```
+
+为了便于测试，我们在开发完所有接口后再绑定中间件
 
 ### 文件上传接口
 本系统借助阿里云 OSS 对象存储来完成文件的上传功能
@@ -550,6 +893,226 @@ group.Group("/file", func(group *ghttp.RouterGroup) {
 	group.Bind(file.FileController)
 })
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

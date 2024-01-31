@@ -40,3 +40,38 @@ func (*iDealer) Login(ctx context.Context, in model.DealerLoginInput) (out *mode
 	}
 	return
 }
+
+// GetList implements service.IDealer.
+func (*iDealer) GetList(ctx context.Context, in model.DealerGetListInput) (out *model.DealerGetListOutput, err error) {
+	// 实例化响应结构体
+	out = &model.DealerGetListOutput{
+		Page:     in.Page,
+		PageSize: in.PageSize,
+	}
+	// 获取*gdb.Model对象
+	var (
+		md = dao.Dealer.Ctx(ctx)
+	)
+	// 关联查询
+	md = md.WithAll()
+
+	if in.Name != "" {
+		md = md.WhereLike(dao.Dealer.Columns().Name, "%"+in.Name+"%")
+	}
+
+	// 设置排序：更新时间降序;设置分页查询
+	md = md.OrderDesc(dao.Dealer.Columns().UpdateTime).Page(in.Page, in.PageSize)
+
+	// 判断当前页的数据条数
+	out.Total, err = md.Count()
+	if err != nil || out.Total == 0 {
+		return out, err
+	}
+
+	// 将查询结果赋值给响应结构体
+	if err := md.Scan(&out.Items); err != nil {
+		return out, err
+	}
+
+	return
+}

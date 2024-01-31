@@ -53,7 +53,7 @@ type AdminAddReq struct {
 	Name   string `p:"name" v:"required#请输入姓名" dc:"姓名"`
 	// 校验规则passport表示通用帐号规则（字母开头，只能包含字母、数字和下划线，长度在6~18之间）
 	Username string `p:"username" v:"required|passport#请输入用户名|请输入正确的用户名格式（字母开头，只能包含字母、数字和下划线，长度在6~18之间）"`
-	Phone    string `P:"phone" v:"required|phone#请输入手机号码|请输入争取的手机号码格式"`
+	Phone    string `P:"phone" v:"required|phone#请输入手机号码|请输入正确的手机号码格式"`
 }
 
 type AdminAddRes struct {
@@ -67,7 +67,7 @@ type AdminUpdateReq struct {
 	Name   string `p:"name" v:"required#请输入姓名" dc:"姓名"`
 	// 校验规则passport表示通用帐号规则（字母开头，只能包含字母、数字和下划线，长度在6~18之间）
 	Username string `p:"username" v:"required|passport#请输入用户名|请输入正确的用户名格式（字母开头，只能包含字母、数字和下划线，长度在6~18之间）"`
-	Phone    string `P:"phone" v:"required|phone#请输入手机号码|请输入争取的手机号码格式"`
+	Phone    string `P:"phone" v:"required|phone#请输入手机号码|请输入正确的手机号码格式"`
 }
 
 type AdminUpdateRes struct{}
@@ -106,3 +106,12 @@ type AdminResetPasswordReq struct {
 }
 
 type AdminResetPasswordRes struct{}
+
+// 修改管理员头像
+type AdminUpdateAvatarReq struct {
+	g.Meta `path:"/updateAvatar" method:"put"`
+	Id     int64  `p:"id" v:"required#请输入Id" dc:"id"`
+	Url    string `p:"url" v:"required|url#请上传头像文件|头像未找到" dc:"头像文件路径"`
+}
+
+type AdminUpdateAvatarRes struct{}

@@ -158,3 +158,16 @@ func (c *cAdmin) AdminResetPassword(ctx context.Context, req *apiAdmin.AdminRese
 
 	return
 }
+
+// 管理员头像修改
+func (c *cAdmin) AdminUpdateAvatar(ctx context.Context, req *apiAdmin.AdminUpdateAvatarReq) (res *apiAdmin.AdminUpdateAvatarRes, err error) {
+	// 调用service接口
+	err = service.Admin().UpdateAvatar(ctx, model.AdminUpdateAvatarInput{
+		Id:  req.Id,
+		Url: req.Url,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}

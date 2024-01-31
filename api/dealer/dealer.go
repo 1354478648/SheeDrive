@@ -1,6 +1,7 @@
 package dealer
 
 import (
+	"SheeDrive/api/pagination"
 	"SheeDrive/internal/model"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -16,4 +17,16 @@ type DealerLoginReq struct {
 type DealerLoginRes struct {
 	Token      string               `json:"token" dc:"验证token"`
 	DealerInfo model.DealerInfoBase `json:"dealer_info" dc:"经销商信息"`
+}
+
+// 经销商分页与关键字查询
+type DealerGetListReq struct {
+	g.Meta `path:"/list" method:"get"`
+	pagination.CommonPaginationReq
+	// 关键字查询可选字段
+	Name string `p:"name" dc:"名称"`
+}
+
+type DealerGetListRes struct {
+	pagination.CommonPaginationRes
 }

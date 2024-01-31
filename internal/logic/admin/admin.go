@@ -97,11 +97,9 @@ func (*iAdmin) GetList(ctx context.Context, in model.AdminGetListInput) (out *mo
 	}
 
 	// 6. 将查询结果赋值给响应结构体
-	var adminList []model.AdminInfoBase
-	if err := md.Scan(&adminList); err != nil {
+	if err := md.Scan(&out.Items); err != nil {
 		return out, err
 	}
-	out.Items = adminList
 
 	return
 }
@@ -248,10 +246,20 @@ func (*iAdmin) ResetPassword(ctx context.Context, in model.AdminResetPasswordInp
 		return err
 	}
 
-	// 重置密码\
+	// 重置密码
 	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(do.Admin{Password: utility.EncryptPassword(consts.DefaultPassword)}).Update()
 	if err != nil {
 		return gerror.New("重置密码失败")
+	}
+	return
+}
+
+// UpdateAvatar implements service.IAdmin.
+func (*iAdmin) UpdateAvatar(ctx context.Context, in model.AdminUpdateAvatarInput) (err error) {
+	// 修改头像
+	_, err = dao.Admin.Ctx(ctx).Data(do.Admin{Avatar: in.Url}).Where(dao.Admin.Columns().Id, in.Id).Update()
+	if err != nil {
+		return gerror.New("修改头像失败")
 	}
 	return
 }
