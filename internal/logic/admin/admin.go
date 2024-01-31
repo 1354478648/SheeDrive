@@ -109,9 +109,7 @@ func (*iAdmin) GetById(ctx context.Context, in model.AdminGetByIdInput) (out *mo
 	// 实例化响应结构体
 	out = &model.AdminGetByIdOutput{}
 
-	err = dao.Admin.Ctx(ctx).Where(do.Admin{
-		Id: in.Id,
-	}).Scan(&out.AdminInfoBase)
+	err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Scan(&out.AdminInfoBase)
 	if err != nil {
 		return out, gerror.New("该管理员不存在")
 	}

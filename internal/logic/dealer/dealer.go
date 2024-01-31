@@ -1,6 +1,7 @@
 package dealer
 
 import (
+	"SheeDrive/internal/consts"
 	"SheeDrive/internal/dao"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/model/do"
@@ -55,6 +56,7 @@ func (*iDealer) GetList(ctx context.Context, in model.DealerGetListInput) (out *
 	// 关联查询
 	md = md.WithAll()
 
+	// 构造动态SQL语句
 	if in.Name != "" {
 		md = md.WhereLike(dao.Dealer.Columns().Name, "%"+in.Name+"%")
 	}
@@ -72,6 +74,62 @@ func (*iDealer) GetList(ctx context.Context, in model.DealerGetListInput) (out *
 	if err := md.Scan(&out.Items); err != nil {
 		return out, err
 	}
+
+	return
+}
+
+// GetById implements service.IDealer.
+func (*iDealer) GetById(ctx context.Context, in model.DealerGetByIdInput) (out *model.DealerGetByIdOutput, err error) {
+	// 实例化响应结构体
+	out = &model.DealerGetByIdOutput{}
+
+	err = dao.Dealer.Ctx(ctx).WithAll().Where(dao.Dealer.Columns().Id, in.Id).Scan(&out.DealerInfoBase)
+	if err != nil {
+		return nil, gerror.New("该经销商不存在")
+	}
+
+	return
+}
+
+// Add implements service.IDealer.
+func (*iDealer) Add(ctx context.Context, in model.DealerAddInput) (out *model.DealerAddOutput, err error) {
+	// 实例化响应结构体
+	out = &model.DealerAddOutput{}
+
+	// 执行添加经销商操作
+	id, err := dao.Dealer.Ctx(ctx).Data(do.Dealer{
+		Name:         in.Name,
+		Username:     in.Username,
+		Password:     utility.EncryptPassword(consts.DefaultPassword),
+		Avatar:       "",
+		Phone:        in.Phone,
+		DescribeInfo: in.DescribeInfo,
+		Status:       1,
+	}).InsertAndGetId()
+	if err != nil {
+		return out, gerror.New("用户名已被占用")
+	}
+	//gerror.New("用户名已被占用")
+	// 将自增主键id赋值给响应结构体
+	out.Id = id
+
+	utility.Geocoding(in.DetailAddress, in.City)
+
+	// // 执行添加经销商地址操作
+	// err = dao.Address.Ctx(ctx).Data(do.Address{
+	// 	Id: utility.GenSnowFlakeId(),
+	// 	BelongId: id,
+	// 	BelongCategory: 1,
+	// 	Latitude:,
+	// 	Longitude:,
+	// 	FormattedAddress:,
+	// 	Province    ,
+	//     City:,
+	//     District:,
+	//     Street:,
+	//     StreetNumber:,
+	//     PoiName:,
+	// }).Insert()
 
 	return
 }

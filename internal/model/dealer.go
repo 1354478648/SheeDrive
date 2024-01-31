@@ -52,3 +52,26 @@ type DealerGetListOutput struct {
 	Total    int              `json:"total"`
 	Items    []DealerInfoBase `json:"items"`
 }
+
+type DealerGetByIdInput struct {
+	Id int64
+}
+
+type DealerGetByIdOutput struct {
+	DealerInfoBase
+}
+
+type DealerAddInput struct {
+	Name          string
+	Username      string
+	Phone         string
+	DescribeInfo  string
+	Province      string
+	City          string
+	District      string
+	DetailAddress string
+}
+
+type DealerAddOutput struct {
+	Id int64
+}

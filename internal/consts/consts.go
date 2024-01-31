@@ -15,4 +15,10 @@ const (
 	ImagesObjectName = "images/"
 	// 临时文件保存地址
 	TempLocalPath = "temp/"
+
+	// 机器码（用于生成雪花Id）
+	MachineID = 1
+
+	// 高德地图key
+	GaodeKey = "c52c5c7e8241b96dc86053ae5e9a23ca"
 )

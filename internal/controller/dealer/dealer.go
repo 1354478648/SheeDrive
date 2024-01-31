@@ -52,3 +52,40 @@ func (c *cDealer) DealerList(ctx context.Context, req *apiDealer.DealerGetListRe
 	}
 	return
 }
+
+// 通过Id查询经销商
+func (c *cDealer) DealerGetById(ctx context.Context, req *apiDealer.DealerGetByIdReq) (res *apiDealer.DealerGetByIdRes, err error) {
+	// 调用service层接口
+	out, err := service.Dealer().GetById(ctx, model.DealerGetByIdInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiDealer.DealerGetByIdRes{
+		DealerInfo: out.DealerInfoBase,
+	}
+	return
+}
+
+// 添加经销商
+func (c *cDealer) DealerAdd(ctx context.Context, req *apiDealer.DealerAddReq) (res *apiDealer.DealerAddRes, err error) {
+	// 调用service层接口
+	out, err := service.Dealer().Add(ctx, model.DealerAddInput{
+		Name:          req.Name,
+		Username:      req.Username,
+		Phone:         req.Phone,
+		DescribeInfo:  req.DescribeInfo,
+		Province:      req.Province,
+		City:          req.City,
+		District:      req.District,
+		DetailAddress: req.DetailAddress,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiDealer.DealerAddRes{
+		Id: out.Id,
+	}
+	return
+}
