@@ -11,8 +11,12 @@ type IDealer interface {
 	GetList(ctx context.Context, in model.DealerGetListInput) (out *model.DealerGetListOutput, err error)
 	GetById(ctx context.Context, in model.DealerGetByIdInput) (out *model.DealerGetByIdOutput, err error)
 	Add(ctx context.Context, in model.DealerAddInput) (out *model.DealerAddOutput, err error)
-	// Update(ctx context.Context, in model.DealerUpdateInput) (err error)
-	// Delete(ctx context.Context, in model.DealerDeleteInput) (err error)
+	Update(ctx context.Context, in model.DealerUpdateInput) (err error)
+	Delete(ctx context.Context, in model.DealerDeleteInput) (err error)
+	UpdateStatus(ctx context.Context, in model.DealerUpdateStatusInput) (err error)
+	UpdatePassword(ctx context.Context, in model.DealerUpdatePasswordInput) (err error)
+	ResetPassword(ctx context.Context, in model.DealerResetPasswordInput) (err error)
+	UpdateAvatar(ctx context.Context, in model.DealerUpdateAvatarInput) (err error)
 }
 
 // 2. 定义接口变量
