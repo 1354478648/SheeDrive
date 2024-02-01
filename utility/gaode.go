@@ -37,7 +37,7 @@ type ReGeocode struct {
 
 type AddressComponent struct {
 	Province     string       `json:"province"`
-	City         string       `json:"city"`
+	City         interface{}  `json:"city"`
 	District     string       `json:"district"`
 	StreetNumber StreetNumber `json:"streetNumber"`
 }
@@ -95,8 +95,7 @@ func ReGeocoding(lnglat string) (reGeocode *ReGeocode, err error) {
 		return nil, gerror.New("发送高德API请求时发生错误")
 	}
 	defer result.Body.Close()
-	fmt.Println("-------------")
-	fmt.Println(result.Body)
+
 	// 读取响应内容
 	body, err := io.ReadAll(result.Body)
 	if err != nil {
@@ -108,9 +107,10 @@ func ReGeocoding(lnglat string) (reGeocode *ReGeocode, err error) {
 	var response ReGeocodeResponse
 	err = json.Unmarshal([]byte(body), &response)
 	if err != nil {
+		fmt.Println(err)
 		return nil, gerror.New("解析JSON数据时发生错误")
 	}
-
+	fmt.Println("-------------")
 	fmt.Println(&response.ReGeocode)
 	return &response.ReGeocode, nil
 }

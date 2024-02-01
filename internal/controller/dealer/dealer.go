@@ -7,7 +7,6 @@ import (
 	"SheeDrive/internal/service"
 	"SheeDrive/utility"
 	"context"
-	"fmt"
 )
 
 var DealerController = &cDealer{}
@@ -133,8 +132,6 @@ func (c *cDealer) DealerUpdateStatus(ctx context.Context, req *apiDealer.DealerU
 	err = service.Dealer().UpdateStatus(ctx, model.DealerUpdateStatusInput{
 		Id: req.Id,
 	})
-	fmt.Println("-------------")
-	utility.ReGeocoding("121.325417,31.226118")
 	if err != nil {
 		return nil, err
 	}

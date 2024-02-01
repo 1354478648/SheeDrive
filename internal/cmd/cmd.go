@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"SheeDrive/internal/controller/admin"
+	cardetail "SheeDrive/internal/controller/car_detail"
 	"SheeDrive/internal/controller/dealer"
 	"SheeDrive/internal/controller/file"
 	"context"
@@ -28,6 +29,9 @@ var (
 				})
 				group.Group("/file", func(group *ghttp.RouterGroup) {
 					group.Bind(file.FileController)
+				})
+				group.Group("/cardetail", func(group *ghttp.RouterGroup) {
+					group.Bind(cardetail.CarDetailController)
 				})
 			})
 			s.Run()
