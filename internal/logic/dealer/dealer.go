@@ -109,27 +109,27 @@ func (*iDealer) Add(ctx context.Context, in model.DealerAddInput) (out *model.De
 	if err != nil {
 		return out, gerror.New("用户名已被占用")
 	}
-	//gerror.New("用户名已被占用")
-	// 将自增主键id赋值给响应结构体
 	out.Id = id
 
-	utility.Geocoding(in.DetailAddress, in.City)
+	geocode, err := utility.Geocoding(in.DetailAddress, in.City)
+	if err != nil {
+		return out, err
+	}
 
-	// // 执行添加经销商地址操作
-	// err = dao.Address.Ctx(ctx).Data(do.Address{
-	// 	Id: utility.GenSnowFlakeId(),
-	// 	BelongId: id,
-	// 	BelongCategory: 1,
-	// 	Latitude:,
-	// 	Longitude:,
-	// 	FormattedAddress:,
-	// 	Province    ,
-	//     City:,
-	//     District:,
-	//     Street:,
-	//     StreetNumber:,
-	//     PoiName:,
-	// }).Insert()
+	// 执行添加经销商地址操作
+	_, err = dao.Address.Ctx(ctx).Data(do.Address{
+		Id:             utility.GenSnowFlakeId(),
+		BelongId:       id,
+		BelongCategory: 1,
+		LngLat:         geocode.Location,
+		Province:       in.Province,
+		City:           in.City,
+		District:       in.District,
+		Detail:         in.DetailAddress,
+	}).Insert()
+	if err != nil {
+		return out, gerror.New("经销商地址添加失败")
+	}
 
 	return
 }

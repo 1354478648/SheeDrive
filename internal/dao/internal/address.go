@@ -20,40 +20,32 @@ type AddressDao struct {
 
 // AddressColumns defines and stores column names for table address.
 type AddressColumns struct {
-	Id               string // 主键ID
-	BelongId         string // 所属ID
-	BelongCategory   string // 所属分类 1:经销商,2:用户
-	Latitude         string // 纬度
-	Longitude        string // 经度
-	FormattedAddress string // 结构化地址
-	Province         string // 省
-	City             string // 市
-	District         string // 区
-	Street           string // 街道
-	StreetNumber     string // 门牌号
-	PoiName          string // POI信息
-	CreateTime       string // 创建时间
-	UpdateTime       string // 更新时间
-	DeleteTime       string // 删除时间
+	Id             string // 主键ID
+	BelongId       string // 所属ID
+	BelongCategory string // 所属分类 1:经销商,2:用户
+	LngLat         string // 经纬度
+	Province       string // 省
+	City           string // 市
+	District       string // 区
+	Detail         string // 详细地址
+	CreateTime     string // 创建时间
+	UpdateTime     string // 更新时间
+	DeleteTime     string // 删除时间
 }
 
 // addressColumns holds the columns for table address.
 var addressColumns = AddressColumns{
-	Id:               "id",
-	BelongId:         "belong_id",
-	BelongCategory:   "belong_category",
-	Latitude:         "latitude",
-	Longitude:        "longitude",
-	FormattedAddress: "formatted_address",
-	Province:         "province",
-	City:             "city",
-	District:         "district",
-	Street:           "street",
-	StreetNumber:     "street_number",
-	PoiName:          "poi_name",
-	CreateTime:       "create_time",
-	UpdateTime:       "update_time",
-	DeleteTime:       "delete_time",
+	Id:             "id",
+	BelongId:       "belong_id",
+	BelongCategory: "belong_category",
+	LngLat:         "lng_lat",
+	Province:       "province",
+	City:           "city",
+	District:       "district",
+	Detail:         "detail",
+	CreateTime:     "create_time",
+	UpdateTime:     "update_time",
+	DeleteTime:     "delete_time",
 }
 
 // NewAddressDao creates and returns a new DAO object for table data access.
