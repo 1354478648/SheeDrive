@@ -8,6 +8,10 @@ import (
 // 1. 定义接口
 type ICarDetail interface {
 	GetList(ctx context.Context, in model.CarDetailGetListInput) (out *model.CarDetailGetListOutput, err error)
+	GetById(ctx context.Context, in model.CarDetailGetByIdInput) (out *model.CarDetailGetByIdOutput, err error)
+	Add(ctx context.Context, in model.CarDetailAddInput) (out *model.CarDetailAddOutput, err error)
+	Update(ctx context.Context, in model.CarDetailUpdateInput) (err error)
+	Delete(ctx context.Context, in model.CarDetailDeleteInput) (err error)
 }
 
 // 2. 定义接口变量
