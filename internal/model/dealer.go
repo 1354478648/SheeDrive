@@ -3,11 +3,14 @@ package model
 import (
 	"SheeDrive/internal/model/do"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // 经销商信息基类
 type DealerInfoBase struct {
+	// 指定映射关系，用于其他表关联查询的时候找到这个结构体对应的数据表
+	g.Meta   `orm:"table:dealer"`
 	Id       int64  `json:"id"         ` // 主键ID
 	Name     string `json:"name"       ` // 名称
 	Username string `json:"username"  `  // 用户名

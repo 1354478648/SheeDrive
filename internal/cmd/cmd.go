@@ -5,6 +5,7 @@ import (
 	cardetail "SheeDrive/internal/controller/car_detail"
 	"SheeDrive/internal/controller/dealer"
 	"SheeDrive/internal/controller/file"
+	"SheeDrive/internal/controller/stock"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -32,6 +33,9 @@ var (
 				})
 				group.Group("/cardetail", func(group *ghttp.RouterGroup) {
 					group.Bind(cardetail.CarDetailController)
+				})
+				group.Group("/stock", func(group *ghttp.RouterGroup) {
+					group.Bind(stock.StockController)
 				})
 			})
 			s.Run()

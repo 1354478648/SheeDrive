@@ -5,4 +5,5 @@ import (
 	_ "SheeDrive/internal/logic/car_detail"
 	_ "SheeDrive/internal/logic/dealer"
 	_ "SheeDrive/internal/logic/middleware"
+	_ "SheeDrive/internal/logic/stock"
 )

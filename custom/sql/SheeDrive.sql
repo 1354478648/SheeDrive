@@ -141,19 +141,18 @@ CREATE TABLE `stock` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `dealer_id` bigint(20) NOT NULL COMMENT '经销商ID',
   `car_id` bigint(20) NOT NULL COMMENT '车辆ID',
-  `stock` int(11) NOT NULL COMMENT '库存数',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='库存表';
 
-INSERT INTO `stock` VALUES (1, 1, 1, 10, NOW(), NOW(), null);
-INSERT INTO `stock` VALUES (2, 1, 2, 10, NOW(), NOW(), null);
-INSERT INTO `stock` VALUES (3, 1, 3, 10, NOW(), NOW(), null);
-INSERT INTO `stock` VALUES (4, 2, 4, 10, NOW(), NOW(), null);
-INSERT INTO `stock` VALUES (5, 3, 5, 10, NOW(), NOW(), null);
-INSERT INTO `stock` VALUES (6, 3, 6, 10, NOW(), NOW(), null);
+INSERT INTO `stock` VALUES (1, 1, 1, NOW(), NOW(), null);
+INSERT INTO `stock` VALUES (2, 1, 2, NOW(), NOW(), null);
+INSERT INTO `stock` VALUES (3, 1, 3, NOW(), NOW(), null);
+INSERT INTO `stock` VALUES (4, 2, 4, NOW(), NOW(), null);
+INSERT INTO `stock` VALUES (5, 3, 5, NOW(), NOW(), null);
+INSERT INTO `stock` VALUES (6, 3, 6, NOW(), NOW(), null);
 
 /*Table structure for table `order` */
 DROP TABLE IF EXISTS `order`;

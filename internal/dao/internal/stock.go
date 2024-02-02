@@ -23,7 +23,6 @@ type StockColumns struct {
 	Id         string // 主键ID
 	DealerId   string // 经销商ID
 	CarId      string // 车辆ID
-	Stock      string // 库存数
 	CreateTime string // 创建时间
 	UpdateTime string // 更新时间
 	DeleteTime string // 删除时间
@@ -34,7 +33,6 @@ var stockColumns = StockColumns{
 	Id:         "id",
 	DealerId:   "dealer_id",
 	CarId:      "car_id",
-	Stock:      "stock",
 	CreateTime: "create_time",
 	UpdateTime: "update_time",
 	DeleteTime: "delete_time",

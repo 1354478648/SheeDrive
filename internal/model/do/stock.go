@@ -15,7 +15,6 @@ type Stock struct {
 	Id         interface{} // 主键ID
 	DealerId   interface{} // 经销商ID
 	CarId      interface{} // 车辆ID
-	Stock      interface{} // 库存数
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeleteTime *gtime.Time // 删除时间
