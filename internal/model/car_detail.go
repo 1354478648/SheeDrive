@@ -3,26 +3,28 @@ package model
 import (
 	"SheeDrive/internal/model/entity"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
 // 汽车信息基类
 type CarDetailInfoBase struct {
-	Id           int64       `json:"id"           orm:"id"`
-	Year         string      `json:"year"         orm:"year"`
-	Brand        string      `json:"brand"        orm:"brand"`
-	Model        string      `json:"model"        orm:"model"`
-	Version      string      `json:"version"      orm:"version"`
-	Image        string      `json:"image"        orm:"image"`
-	Category     int         `json:"category"     orm:"category"`
-	Color        string      `json:"color"        orm:"color"`
-	Price        int64       `json:"price"        orm:"price"`
-	Type         int         `json:"type"         orm:"type"`
-	Seats        int         `json:"seats"        orm:"seats"`
-	DescribeInfo string      `json:"describeInfo" orm:"describe_info"`
-	CreateTime   *gtime.Time `json:"createTime"   orm:"create_time"`
-	UpdateTime   *gtime.Time `json:"updateTime"   orm:"update_time"`
-	DeleteTime   *gtime.Time `json:"deleteTime"   orm:"delete_time"`
+	g.Meta       `orm:"table:car_detail"`
+	Id           int64       `json:"id"          `
+	Year         string      `json:"year"        `
+	Brand        string      `json:"brand"       `
+	Model        string      `json:"model"       `
+	Version      string      `json:"version"     `
+	Image        string      `json:"image"       `
+	Category     int         `json:"category"    `
+	Color        string      `json:"color"       `
+	Price        int64       `json:"price"       `
+	Type         int         `json:"type"        `
+	Seats        int         `json:"seats"       `
+	DescribeInfo string      `json:"describeInfo"`
+	CreateTime   *gtime.Time `json:"createTime"  `
+	UpdateTime   *gtime.Time `json:"updateTime"  `
+	DeleteTime   *gtime.Time `json:"deleteTime"  `
 }
 
 // 汽车信息添加修改基类
