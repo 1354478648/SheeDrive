@@ -3,8 +3,11 @@ package stock
 import (
 	"SheeDrive/internal/dao"
 	"SheeDrive/internal/model"
+	"SheeDrive/internal/model/do"
 	"SheeDrive/internal/service"
 	"context"
+
+	"github.com/gogf/gf/errors/gerror"
 )
 
 type iStock struct{}
@@ -51,5 +54,43 @@ func (*iStock) GetList(ctx context.Context, in model.StockGetListInput) (out *mo
 	// 6. 关联查询
 	md.WithAll().Scan(&out.Items)
 
+	return
+}
+
+// GetById implements service.IStock.
+func (*iStock) GetById(ctx context.Context, in model.StockGetByIdInput) (out *model.StockGetByIdOutput, err error) {
+	out = &model.StockGetByIdOutput{}
+
+	err = dao.Stock.Ctx(ctx).WithAll().Where(dao.Stock.Columns().Id, in.Id).Scan(&out.StockInfoBase)
+	if err != nil {
+		return nil, gerror.New("该库存信息不存在")
+	}
+	return
+}
+
+// Add implements service.IStock.
+func (*iStock) Add(ctx context.Context, in model.StockAddInput) (out *model.StockAddOutput, err error) {
+	out = &model.StockAddOutput{}
+
+	id, err := dao.Stock.Ctx(ctx).Data(do.Stock{
+		DealerId: in.DealerId,
+		CarId:    in.CarId,
+	}).InsertAndGetId()
+	if err != nil {
+		// 经销商和汽车信息字段组合需要有唯一性索引
+		// ALTER TABLE `stock` ADD CONSTRAINT `uc_dealer_car` UNIQUE (`dealer_id`, `car_id`)
+		return out, gerror.New("不允许重复添加已存在的库存信息")
+	}
+	out.Id = id
+
+	return
+}
+
+// Delete implements service.IStock.
+func (*iStock) Delete(ctx context.Context, in model.StockDeleteInput) (err error) {
+	_, err = dao.Stock.Ctx(ctx).Where(dao.Stock.Columns().Id, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除库存失败")
+	}
 	return
 }

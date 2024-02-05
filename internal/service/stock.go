@@ -8,9 +8,9 @@ import (
 // 1. 定义接口
 type IStock interface {
 	GetList(ctx context.Context, in model.StockGetListInput) (out *model.StockGetListOutput, err error)
-	// Add(ctx context.Context, in model.StockAddInput) (out *model.StockAddOutput, err error)
-	// Update(ctx context.Context, in model.StockUpdateInput) (err error)
-	// Delete(ctx context.Context, in model.StockDeleteInput) (err error)
+	GetById(ctx context.Context, in model.StockGetByIdInput) (out *model.StockGetByIdOutput, err error)
+	Add(ctx context.Context, in model.StockAddInput) (out *model.StockAddOutput, err error)
+	Delete(ctx context.Context, in model.StockDeleteInput) (err error)
 }
 
 // 2. 定义接口变量

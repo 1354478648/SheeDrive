@@ -28,3 +28,24 @@ type StockGetListOutput struct {
 	Total    int             `json:"total"`
 	Items    []StockInfoBase `json:"items"`
 }
+
+type StockGetByIdInput struct {
+	Id int64
+}
+
+type StockGetByIdOutput struct {
+	StockInfoBase
+}
+
+type StockAddInput struct {
+	DealerId int64
+	CarId    int64
+}
+
+type StockAddOutput struct {
+	Id int64 `json:"id"`
+}
+
+type StockDeleteInput struct {
+	Id int64
+}
