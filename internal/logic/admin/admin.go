@@ -231,7 +231,7 @@ func (*iAdmin) UpdatePassword(ctx context.Context, in model.AdminUpdatePasswordI
 	// 更新密码
 	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, in.Id).Data(do.Admin{Password: utility.EncryptPassword(in.NewPassword)}).Update()
 	if err != nil {
-		return gerror.New("更新密码失败")
+		return gerror.New("修改密码失败")
 	}
 	return
 }

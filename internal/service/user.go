@@ -11,9 +11,10 @@ type IUser interface {
 	Register(ctx context.Context, in model.UserRegisterInput) (out *model.UserRegisterOutput, err error)
 	GetList(ctx context.Context, in model.UserGetListInput) (out *model.UserGetListOutput, err error)
 	GetById(ctx context.Context, in model.UserGetByIdInput) (out *model.UserGetByIdOutput, err error)
-	// Add(ctx context.Context, in model.UserAddInput) (out *model.UserAddOutput, err error)
-	// Update(ctx context.Context, in model.UserUpdateInput) (err error)
-	// Delete(ctx context.Context, in model.UserDeleteInput) (err error)
+	Delete(ctx context.Context, in model.UserDeleteInput) (err error)
+	UpdateStatus(ctx context.Context, in model.UserUpdateStatusInput) (err error)
+	UpdatePassword(ctx context.Context, in model.UserUpdatePasswordInput) (err error)
+	UpdateAvatar(ctx context.Context, in model.UserUpdateAvatarInput) (err error)
 }
 
 // 2. 定义接口变量

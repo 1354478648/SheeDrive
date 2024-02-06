@@ -7,6 +7,7 @@ import (
 	"SheeDrive/internal/service"
 	"SheeDrive/utility"
 	"context"
+	"strings"
 
 	"github.com/gogf/gf/errors/gerror"
 )
@@ -58,12 +59,22 @@ func (*iUser) Register(ctx context.Context, in model.UserRegisterInput) (out *mo
 		Birthday:  utility.GetBirthDay(in.IdNumber),
 		Status:    1,
 	}).Insert()
+	// 这里还需要添加身份证的唯一性索引，另外想从err错误信息中提取错误信息，打印不同的错误提示
+	// ALTER TABLE `user` ADD CONSTRAINT `uc_idNumber` UNIQUE (`id_number`)
 	if err != nil {
+		if strings.Contains(err.Error(), "idx_username") {
+			return out, gerror.New("该用户名已存在")
+		}
+		if strings.Contains(err.Error(), "id_number") {
+			return out, gerror.New("该身份证号已存在")
+		}
 		return out, gerror.New("注册失败")
 	}
 
+	// 返回新注册用户信息
 	UserInfo, err := service.User().GetById(ctx, model.UserGetByIdInput{Id: id})
 	out.UserInfoBase = UserInfo.UserInfoBase
+
 	return
 }
 
@@ -125,5 +136,65 @@ func (*iUser) GetById(ctx context.Context, in model.UserGetByIdInput) (out *mode
 		return out, gerror.New("该用户不存在")
 	}
 
+	return
+}
+
+// Delete implements service.IUser.
+func (*iUser) Delete(ctx context.Context, in model.UserDeleteInput) (err error) {
+	_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除用户失败")
+	}
+	return
+}
+
+// UpdateAvatar implements service.IUser.
+func (*iUser) UpdateAvatar(ctx context.Context, in model.UserUpdateAvatarInput) (err error) {
+	_, err = dao.User.Ctx(ctx).Data(do.User{Avatar: in.Url}).Where(dao.User.Columns().Id, in.Id).Update()
+	if err != nil {
+		return gerror.New("修改头像失败")
+	}
+	return
+}
+
+// UpdatePassword implements service.IUser.
+func (*iUser) UpdatePassword(ctx context.Context, in model.UserUpdatePasswordInput) (err error) {
+	// 获取原密码
+	oldPassword, err := dao.User.Ctx(ctx).Where(dao.User.Columns().Id, in.Id).Value(dao.User.Columns().Password)
+	if err != nil {
+		return gerror.New("获取原密码失败")
+	}
+	if utility.EncryptPassword(in.OldPassword) != oldPassword.String() {
+		return gerror.New("新旧密码不一致")
+	}
+	// 更新密码
+	_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, in.Id).Data(do.User{Password: utility.EncryptPassword(in.NewPassword)}).Update()
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	return
+}
+
+// UpdateStatus implements service.IUser.
+func (*iUser) UpdateStatus(ctx context.Context, in model.UserUpdateStatusInput) (err error) {
+	id := in.Id
+	userInfo, err := service.User().GetById(ctx, model.UserGetByIdInput{
+		Id: id,
+	})
+	if err != nil {
+		return gerror.New("该用户不存在")
+	}
+	switch userInfo.Status {
+	case 0:
+		_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, in.Id).Data(do.User{Status: 1}).Update()
+		if err != nil {
+			return gerror.New("用户状态切换失败")
+		}
+	case 1:
+		_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, in.Id).Data(do.User{Status: 0}).Update()
+		if err != nil {
+			return gerror.New("用户状态切换失败")
+		}
+	}
 	return
 }

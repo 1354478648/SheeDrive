@@ -67,3 +67,22 @@ type UserGetByIdInput struct {
 type UserGetByIdOutput struct {
 	UserInfoBase
 }
+
+type UserDeleteInput struct {
+	Id int64
+}
+
+type UserUpdateStatusInput struct {
+	Id int64
+}
+
+type UserUpdatePasswordInput struct {
+	Id          int64
+	OldPassword string
+	NewPassword string
+}
+
+type UserUpdateAvatarInput struct {
+	Id  int64
+	Url string
+}

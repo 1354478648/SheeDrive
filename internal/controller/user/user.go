@@ -86,3 +86,50 @@ func (c *cUser) UserGetById(ctx context.Context, req *apiUser.UserGetByIdReq) (r
 	}
 	return
 }
+
+// 删除用户
+func (c *cUser) UserDelete(ctx context.Context, req *apiUser.UserDeleteReq) (res *apiUser.UserDeleteRes, err error) {
+	err = service.User().Delete(ctx, model.UserDeleteInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// 用户状态修改
+func (c *cUser) UserUpdateStatus(ctx context.Context, req *apiUser.UserUpdateStatusReq) (res *apiUser.UserUpdateStatusRes, err error) {
+	err = service.User().UpdateStatus(ctx, model.UserUpdateStatusInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// 用户密码修改
+func (c *cUser) UserUpdatePassword(ctx context.Context, req *apiUser.UserUpdatePasswordReq) (res *apiUser.UserUpdatePasswordRes, err error) {
+	err = service.User().UpdatePassword(ctx, model.UserUpdatePasswordInput{
+		Id:          req.Id,
+		OldPassword: req.Password,
+		NewPassword: req.NewPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// 用户头像修改
+func (c *cUser) UserUpdateAvatar(ctx context.Context, req *apiUser.UserUpdateAvatarReq) (res *apiUser.UserUpdateAvatarRes, err error) {
+	err = service.User().UpdateAvatar(ctx, model.UserUpdateAvatarInput{
+		Id:  req.Id,
+		Url: req.Url,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}

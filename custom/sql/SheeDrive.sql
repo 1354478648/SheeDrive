@@ -55,6 +55,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户信息';
+ALTER TABLE `user` ADD CONSTRAINT `uc_idNumber` UNIQUE (`id_number`);
 
 INSERT INTO `user` VALUES (1, '汤', '日成', '15001807369', '123456', null, '15001807369', '310115200207179212', '男', '2002-07-17', '1', NOW(), NOW(), null);
 INSERT INTO `user` VALUES (2, '张', '三', '15001801111', '123456', null, '15001801111', '310115200101011111', '男', '2001-01-01', '1', NOW(), NOW(), null);
@@ -146,6 +147,7 @@ CREATE TABLE `stock` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='库存表';
+ALTER TABLE `stock` ADD CONSTRAINT `uc_dealer_car` UNIQUE (`dealer_id`, `car_id`);
 
 INSERT INTO `stock` VALUES (1, 1, 1, NOW(), NOW(), null);
 INSERT INTO `stock` VALUES (2, 1, 2, NOW(), NOW(), null);
@@ -187,3 +189,29 @@ CREATE TABLE `comment` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='评价表';
+
+/*Table structure for table `article` */
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE `article` (
+  `id` bigint(20) NOT NULL COMMENT '主键ID',
+  `belong_id` bigint(64) NOT NULL COMMENT '作者ID',
+  `is_top` int(11) NOT NULL DEFAULT '0' COMMENT '是否置顶 0否 1是',
+  `title` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '标题',
+  `content` varchar(500) COLLATE utf8_bin NOT NULL COMMENT '内容',
+  `car_id` bigint(20) DEFAULT NULL COMMENT '汽车ID',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+   PRIMARY KEY (`id`) USING BTREE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='文章表';
+
+/*Table structure for table `article_images` */
+DROP TABLE IF EXISTS `article_images`;
+CREATE TABLE `article_images` (
+  `id` bigint(20) NOT NULL COMMENT '主键ID',
+  `article_id` bigint(20) NOT NULL COMMENT '文章ID',
+  `url` varchar(500) COLLATE utf8_bin NOT NULL COMMENT '图片URL',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='文章图片表';
