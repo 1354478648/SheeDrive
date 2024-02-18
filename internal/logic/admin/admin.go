@@ -10,6 +10,7 @@ import (
 	"context"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 type iAdmin struct{}
@@ -53,6 +54,14 @@ func (*iAdmin) Login(ctx context.Context, in model.AdminLoginInput) (out *model.
 	// 判断管理员状态是否被禁用
 	if out.AdminInfoBase.Status == 0 {
 		return nil, gerror.New("该管理员已被禁用")
+	}
+
+	// 生成token
+	out.Token = utility.GenToken(in.Username)
+	// 将token保存到redis中
+	err = g.Redis().SetEX(ctx, out.Token, out.Token, 86400)
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
 	}
 
 	return

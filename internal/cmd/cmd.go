@@ -7,6 +7,7 @@ import (
 	"SheeDrive/internal/controller/file"
 	"SheeDrive/internal/controller/stock"
 	"SheeDrive/internal/controller/user"
+	"SheeDrive/internal/service"
 	"context"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -23,23 +24,65 @@ var (
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
+				// 无需鉴权的路由组
 				group.Group("/admin", func(group *ghttp.RouterGroup) {
-					group.Bind(admin.AdminController)
+					group.Bind(admin.AdminController.AdminLogin)
 				})
 				group.Group("/dealer", func(group *ghttp.RouterGroup) {
-					group.Bind(dealer.DealerController)
-				})
-				group.Group("/file", func(group *ghttp.RouterGroup) {
-					group.Bind(file.FileController)
-				})
-				group.Group("/cardetail", func(group *ghttp.RouterGroup) {
-					group.Bind(cardetail.CarDetailController)
-				})
-				group.Group("/stock", func(group *ghttp.RouterGroup) {
-					group.Bind(stock.StockController)
+					group.Bind(dealer.DealerController.DealerLogin)
 				})
 				group.Group("/user", func(group *ghttp.RouterGroup) {
-					group.Bind(user.UserController)
+					group.Bind(user.UserController.UserLogin)
+				})
+				// 需要鉴权的路由组
+				group.Group("/", func(group *ghttp.RouterGroup) {
+					group.Middleware(service.Middleware().Auth)
+					group.Group("/admin", func(group *ghttp.RouterGroup) {
+						group.Bind(
+							admin.AdminController.AdminAdd,
+							admin.AdminController.AdminDelete,
+							admin.AdminController.AdminGetById,
+							admin.AdminController.AdminResetPassword,
+							admin.AdminController.AdminUpdate,
+							admin.AdminController.AdminUpdateAvatar,
+							admin.AdminController.AdminUpdatePassword,
+							admin.AdminController.AdminUpdateStatus,
+							admin.AdminController.GetAdminList,
+						)
+					})
+					group.Group("/dealer", func(group *ghttp.RouterGroup) {
+						group.Bind(
+							dealer.DealerController.DealerAdd,
+							dealer.DealerController.DealerDelete,
+							dealer.DealerController.DealerGetById,
+							dealer.DealerController.DealerList,
+							dealer.DealerController.DealerResetPassword,
+							dealer.DealerController.DealerUpdate,
+							dealer.DealerController.DealerUpdateAvatar,
+							dealer.DealerController.DealerUpdatePassword,
+							dealer.DealerController.DealerUpdateStatus,
+						)
+					})
+					group.Group("/user", func(group *ghttp.RouterGroup) {
+						group.Bind(
+							user.UserController.UserDelete,
+							user.UserController.UserGetById,
+							user.UserController.UserGetList,
+							user.UserController.UserRegister,
+							user.UserController.UserUpdateAvatar,
+							user.UserController.UserUpdatePassword,
+							user.UserController.UserUpdateStatus,
+						)
+					})
+					group.Group("/file", func(group *ghttp.RouterGroup) {
+						group.Bind(file.FileController)
+					})
+					group.Group("/cardetail", func(group *ghttp.RouterGroup) {
+						group.Bind(cardetail.CarDetailController)
+					})
+					group.Group("/stock", func(group *ghttp.RouterGroup) {
+						group.Bind(stock.StockController)
+					})
 				})
 			})
 			s.Run()

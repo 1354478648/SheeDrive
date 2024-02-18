@@ -5,7 +5,6 @@ import (
 	apiPagination "SheeDrive/api/pagination"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/service"
-	"SheeDrive/utility"
 	"context"
 )
 
@@ -25,7 +24,7 @@ func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (r
 		return nil, err
 	}
 	res = &apiAdmin.AdminLoginRes{
-		Token:     utility.GenToken(admin.Username),
+		Token:     admin.Token,
 		AdminInfo: admin.AdminInfoBase,
 	}
 	return

@@ -44,6 +44,7 @@ type DealerLoginInput struct {
 }
 
 type DealerLoginOutput struct {
+	Token string `json:token`
 	DealerInfoBase
 }
 

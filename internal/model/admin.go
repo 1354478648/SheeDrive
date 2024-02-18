@@ -34,6 +34,7 @@ type AdminLoginInput struct {
 
 // AdminLoginOutput 管理员登录结果
 type AdminLoginOutput struct {
+	Token string `json:"token"`
 	AdminInfoBase
 }
 

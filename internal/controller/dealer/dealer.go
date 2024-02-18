@@ -5,7 +5,6 @@ import (
 	apiPagination "SheeDrive/api/pagination"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/service"
-	"SheeDrive/utility"
 	"context"
 )
 
@@ -24,7 +23,7 @@ func (c *cDealer) DealerLogin(ctx context.Context, req *apiDealer.DealerLoginReq
 		return nil, err
 	}
 	res = &apiDealer.DealerLoginRes{
-		Token:      utility.GenToken(dealer.Username),
+		Token:      dealer.Token,
 		DealerInfo: dealer.DealerInfoBase,
 	}
 

@@ -1,11 +1,10 @@
 package middleware
 
 import (
-	"SheeDrive/internal/consts"
 	"SheeDrive/internal/service"
 
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
-	"github.com/golang-jwt/jwt/v5"
 )
 
 type iMiddleware struct{}
@@ -26,16 +25,24 @@ func (*iMiddleware) Auth(r *ghttp.Request) {
 			Message: "请先登录",
 		}
 	} else {
-		token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
-			return []byte(consts.JwtTokenKey), nil
-		})
-
-		if err != nil || !token.Valid {
+		value, err := g.Redis().Get(r.Context(), tokenStr)
+		if err != nil || value == nil || value.String() != tokenStr {
 			res = &ghttp.DefaultHandlerResponse{
 				Code:    403,
 				Message: "身份验证已过期，请重新登录",
 			}
 		}
+
+		// token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
+		// 	return []byte(consts.JwtTokenKey), nil
+		// })
+
+		// if err != nil || !token.Valid {
+		// 	res = &ghttp.DefaultHandlerResponse{
+		// 		Code:    403,
+		// 		Message: "身份验证已过期，请重新登录",
+		// 	}
+		// }
 	}
 	if res != nil {
 		r.Response.WriteJsonExit(res)

@@ -11,6 +11,7 @@ import (
 	"fmt"
 
 	"github.com/gogf/gf/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 type iDealer struct{}
@@ -40,6 +41,15 @@ func (*iDealer) Login(ctx context.Context, in model.DealerLoginInput) (out *mode
 	if out.DealerInfoBase.Status == 0 {
 		return nil, gerror.New("该经销商账号已被禁用")
 	}
+
+	// 生成token
+	out.Token = utility.GenToken(in.Username)
+	// 将token保存到redis中
+	err = g.Redis().SetEX(ctx, out.Token, out.Token, 86400)
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
 	return
 }
 
