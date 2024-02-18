@@ -894,9 +894,38 @@ group.Group("/file", func(group *ghttp.RouterGroup) {
 })
 ```
 
+### Redis 缓存优化
+#### 安装与配置
+在 Goframe 中，通过`gredis`组件实现 Redis 客户端。在项目中引入 Redis：
+1. 安装
+```bash
+go get -u github.com/gogf/gf/contrib/nosql/redis/v2
+```
+2. 引用
+```go
+import (
+	_ "github.com/gogf/gf/contrib/nosql/redis/v2"
+
+	// other imported packages.
+)
+```
+3. 在`config.yaml`中配置 Redis：
+```yaml
+redis:
+  default:
+    address: 127.0.0.1:6379
+    db: 1
+```
+其中`default`表示配置分组名称，在程序中通过该名称获取对应配置的`redis`单例对象。不传递分组名称时，默认使用`redis.default`来获取。
+
+其他配置项（比如密码、连接最大空闲时间等）参考官方文档：
+
+> https://goframe.org/pages/viewpage.action?pageId=1114217
 
 
 
+### 短信验证码登录(模拟)
+阿里云短信服务需要付费，并且需要等待较长的审批流程，因此这里选择模拟发送短信验证码的方式登录账号
 
 
 

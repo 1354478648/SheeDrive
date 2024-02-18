@@ -20,6 +20,11 @@ type UserLoginRes struct {
 	UserInfo model.UserInfoBase `json:"user_info" dc:"用户信息"`
 }
 
+// // 用户短信验证码发送
+// type UserSendSmsCodeReq struct {
+//     g.Meta
+// }
+
 // 用户注册
 type UserRegisterReq struct {
 	g.Meta          `path:"/register" method:"post"`
