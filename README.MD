@@ -309,37 +309,18 @@ gf gen dao
 
 <img src="./custom/images/PixPin_2024-01-31_10-04-32.png" width="50%" height="auto">
 
-下面对图中出现的内容进行细节上的解释
-
-#### 路由绑定与转发
-路由绑定与转发由`cmd`负责，
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### 管理员相关接口
 管理员相关接口共11个，包括：登录、分页关键字查询、通过ID查询、添加、删除、信息修改、状态切换、密码修改、密码重置
 #### 登录
 1. 编写 API 数据结构
-`api/admin/admin.go`
+
+  请求结构体使用`g.Meta`定义接口路径和请求方法，再定义请求参数，其中`p`标签用于自定义映射规则(比如前端发来名为`username`的参数可以映射为`Username`，但通常 GoFrame 自带的映射规则已经足够使用)，`v`标签用于指定参数校验规则，更多校验规则可以查看官方文档：
+
+  > https://goframe.org/pages/viewpage.action?pageId=1114367
+
+  响应结构体使用`json`标签将返回数据以指定的json格式传给前端
+
+  `api/admin/admin.go`
 ```go
 // 管理员登录
 type AdminLoginReq struct {
@@ -354,7 +335,7 @@ type AdminLoginRes struct {
 }
 ```
 
-2. 编写控制层框架及路由绑定
+2. 编写控制层框架及路由绑定，控制层方法使用规范路由的写法
 `internal/controller/admin/admin.go`
 ```go
 package admin
@@ -378,6 +359,7 @@ func (c *cAdmin) AdminLogin(ctx context.Context, req *apiAdmin.AdminLoginReq) (r
 }
 ```
 `internal/cmd/cmd.go`
+
 ```go
 group.Group("/admin", func(group *ghttp.RouterGroup) {
 	group.Bind(admin.AdminController)
@@ -651,6 +633,11 @@ import (
 
 为了便于测试，我们在开发完所有接口后再绑定中间件
 
+#### 分页关键字查询
+
+
+
+
 ### 文件上传接口
 本系统借助阿里云 OSS 对象存储来完成文件的上传功能
 
@@ -658,7 +645,6 @@ import (
 登录阿里云平台，在产品中找到对象存储 OSS后，进入管理控制台创建 Bucket，参考设置如下：
 
 <img src="./custom/images/PixPin_2024-01-29_15-20-41.png" width="80%" height="auto">
-
 
 #### 安装SDK
 1. 使用源码方式安装 SDK

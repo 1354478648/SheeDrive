@@ -5,12 +5,20 @@ go 1.18
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible
 	github.com/gogf/gf/contrib/drivers/mysql/v2 v2.6.2
-	github.com/gogf/gf/v2 v2.6.2
+	github.com/gogf/gf/v2 v2.6.3
 	github.com/google/uuid v1.6.0
 )
 
 require (
+<<<<<<< HEAD
 	go.opentelemetry.io/otel/metric v1.23.0 // indirect
+=======
+	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/gogf/gf/contrib/nosql/redis/v2 v2.6.3 // indirect
+	github.com/redis/go-redis/v9 v9.4.0 // indirect
+	go.opentelemetry.io/otel/metric v1.23.1 // indirect
+>>>>>>> 8e9a09bf556d9f6e8cf341b1a4a5a063a63c1811
 	golang.org/x/time v0.5.0 // indirect
 )
 
@@ -32,11 +40,19 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/olekukonko/tablewriter v0.0.5 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
+<<<<<<< HEAD
 	go.opentelemetry.io/otel v1.23.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.23.0 // indirect
 	go.opentelemetry.io/otel/trace v1.23.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
+=======
+	go.opentelemetry.io/otel v1.23.1 // indirect
+	go.opentelemetry.io/otel/sdk v1.23.1 // indirect
+	go.opentelemetry.io/otel/trace v1.23.1 // indirect
+	golang.org/x/net v0.17.0 // indirect
+	golang.org/x/sys v0.17.0 // indirect
+>>>>>>> 8e9a09bf556d9f6e8cf341b1a4a5a063a63c1811
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
