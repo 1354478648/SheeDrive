@@ -20,6 +20,7 @@ type Dealer struct {
 	Phone        interface{} // 手机号
 	DescribeInfo interface{} // 描述信息
 	Status       interface{} // 状态 0:禁用, 1:正常
+	Token        interface{} // token
 	CreateTime   *gtime.Time // 创建时间
 	UpdateTime   *gtime.Time // 更新时间
 	DeleteTime   *gtime.Time // 删除时间

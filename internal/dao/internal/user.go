@@ -31,6 +31,7 @@ type UserColumns struct {
 	Sex        string // 性别
 	Birthday   string // 生日
 	Status     string // 状态 0:禁用, 1:正常
+	Token      string // token
 	CreateTime string // 创建时间
 	UpdateTime string // 更新时间
 	DeleteTime string // 删除时间
@@ -49,6 +50,7 @@ var userColumns = UserColumns{
 	Sex:        "sex",
 	Birthday:   "birthday",
 	Status:     "status",
+	Token:      "token",
 	CreateTime: "create_time",
 	UpdateTime: "update_time",
 	DeleteTime: "delete_time",

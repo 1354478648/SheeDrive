@@ -28,6 +28,7 @@ type AdminColumns struct {
 	Phone      string // 手机号
 	Status     string // 状态 0:禁用, 1:正常
 	IsRoot     string // 是否是超级管理员 0:否, 1:是
+	Token      string // token
 	CreateTime string // 创建时间
 	UpdateTime string // 更新时间
 	DeleteTime string // 删除时间
@@ -43,6 +44,7 @@ var adminColumns = AdminColumns{
 	Phone:      "phone",
 	Status:     "status",
 	IsRoot:     "isRoot",
+	Token:      "token",
 	CreateTime: "create_time",
 	UpdateTime: "update_time",
 	DeleteTime: "delete_time",

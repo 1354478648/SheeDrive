@@ -20,6 +20,7 @@ type Admin struct {
 	Phone      interface{} // 手机号
 	Status     interface{} // 状态 0:禁用, 1:正常
 	IsRoot     interface{} // 是否是超级管理员 0:否, 1:是
+	Token      interface{} // token
 	CreateTime *gtime.Time // 创建时间
 	UpdateTime *gtime.Time // 更新时间
 	DeleteTime *gtime.Time // 删除时间

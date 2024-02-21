@@ -64,6 +64,13 @@ func (*iAdmin) Login(ctx context.Context, in model.AdminLoginInput) (out *model.
 		return nil, gerror.New("Token保存失败")
 	}
 
+	// 将Token持久化
+	_, err = dao.Admin.Ctx(ctx).Where(dao.Admin.Columns().Id, out.AdminInfoBase.Id).Data(
+		do.Admin{Token: out.Token}).Update()
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
 	return
 }
 
@@ -258,6 +265,18 @@ func (*iAdmin) ResetPassword(ctx context.Context, in model.AdminResetPasswordInp
 	if err != nil {
 		return gerror.New("重置密码失败")
 	}
+
+	// 删除对应id的token
+	id := in.Id
+	adminInfo, err := service.Admin().GetById(ctx, model.AdminGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该管理员")
+	}
+	_, err = g.Redis().Del(ctx, adminInfo.Token)
+	if err != nil {
+		return gerror.New("重置密码失败")
+	}
+
 	return
 }
 

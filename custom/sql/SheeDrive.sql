@@ -25,6 +25,7 @@ CREATE TABLE `admin` (
   `phone` varchar(11) COLLATE utf8_bin NOT NULL COMMENT '手机号',
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 0:禁用, 1:正常',
   `isRoot` int(11) NOT NULL DEFAULT '0' COMMENT '是否是超级管理员 0:否, 1:是',
+  `token` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT 'token',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
@@ -32,8 +33,8 @@ CREATE TABLE `admin` (
   UNIQUE INDEX `idx_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='管理员信息';
 
-INSERT INTO `admin` VALUES (1, '超级管理员', 'admin', '123456', null, '13001801111', 1, 1, NOW(), NOW(), null);
-INSERT INTO `admin` VALUES (2, '汤日成', 'TangRiCheng', '123456', null, '13001802222', 1, 1, NOW(), NOW(), null);
+INSERT INTO `admin` VALUES (1, '超级管理员', 'admin', '14e1b600b1fd579f47433b88e8d85291', null, '13001801111', 1, 1, null, NOW(), NOW(), null);
+INSERT INTO `admin` VALUES (2, '汤日成', 'TangRiCheng', '14e1b600b1fd579f47433b88e8d85291', null, '13001802222', 1, 1, null, NOW(), NOW(), null);
 
 /*Table structure for table `user` */
 DROP TABLE IF EXISTS `user`;
@@ -49,6 +50,7 @@ CREATE TABLE `user` (
   `sex` varchar(2) COLLATE utf8_bin DEFAULT NULL COMMENT '性别',
   `birthday` datetime DEFAULT NULL COMMENT '生日',
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 0:禁用, 1:正常',
+  `token` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT 'token',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
@@ -57,11 +59,11 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户信息';
 ALTER TABLE `user` ADD CONSTRAINT `uc_idNumber` UNIQUE (`id_number`);
 
-INSERT INTO `user` VALUES (1, '汤', '日成', '15001807369', '123456', null, '15001807369', '310115200207179212', '男', '2002-07-17', '1', NOW(), NOW(), null);
-INSERT INTO `user` VALUES (2, '张', '三', '15001801111', '123456', null, '15001801111', '310115200101011111', '男', '2001-01-01', '1', NOW(), NOW(), null);
-INSERT INTO `user` VALUES (3, '李', '四', '15001802222', '123456', null, '15001802222', '310115200101022222', '女', '2002-01-02', '1', NOW(), NOW(), null);
-INSERT INTO `user` VALUES (4, '王', '五', '15001803333', '123456', null, '15001803333', '310115200101031111', '男', '2002-01-03', '1', NOW(), NOW(), null);
-INSERT INTO `user` VALUES (5, '赵', '六', '15001804444', '123456', null, '15001804444', '310115200101042222', '女', '2002-01-04', '1', NOW(), NOW(), null);
+INSERT INTO `user` VALUES (1, '汤', '日成', '15001807369', '14e1b600b1fd579f47433b88e8d85291', null, '15001807369', '310115200207179212', '男', '2002-07-17', 1, null, NOW(), NOW(), null);
+INSERT INTO `user` VALUES (2, '张', '三', '15001801111', '14e1b600b1fd579f47433b88e8d85291', null, '15001801111', '310115200101011111', '男', '2001-01-01', 1, null, NOW(), NOW(), null);
+INSERT INTO `user` VALUES (3, '李', '四', '15001802222', '14e1b600b1fd579f47433b88e8d85291', null, '15001802222', '310115200101022222', '女', '2002-01-02', 1, null, NOW(), NOW(), null);
+INSERT INTO `user` VALUES (4, '王', '五', '15001803333', '14e1b600b1fd579f47433b88e8d85291', null, '15001803333', '310115200101031111', '男', '2002-01-03', 1, null, NOW(), NOW(), null);
+INSERT INTO `user` VALUES (5, '赵', '六', '15001804444', '14e1b600b1fd579f47433b88e8d85291', null, '15001804444', '310115200101042222', '女', '2002-01-04', 1, null, NOW(), NOW(), null);
 
 /*Table structure for table `dealer` */
 DROP TABLE IF EXISTS `dealer`;
@@ -74,6 +76,7 @@ CREATE TABLE `dealer`(
   `phone` varchar(11) COLLATE utf8_bin NOT NULL COMMENT '手机号',
   `describe_info` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '描述信息',
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态 0:禁用, 1:正常',
+  `token` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT 'token',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
@@ -81,11 +84,11 @@ CREATE TABLE `dealer`(
   UNIQUE INDEX `idx_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='经销商信息';
 
-INSERT INTO `dealer` VALUES (1, '上海子鼠汽车', 'zishu', '123456', null, '15001801111', '五星经销商，好评不断！', 1, NOW(), NOW(), null);
-INSERT INTO `dealer` VALUES (2, '上海丑牛汽车', 'chouniu', '123456', null, '15001802222', '百万客户，好评连连！', 1, NOW(), NOW(), null);
-INSERT INTO `dealer` VALUES (3, '上海寅虎汽车', 'yinhu', '123456', null, '15001803333', '您身边的汽车管家！', 1, NOW(), NOW(), null);
-INSERT INTO `dealer` VALUES (4, '上海卯兔汽车', 'maotu', '123456', null, '15001804444', '尊享服务，就在你家门口！', 1, NOW(), NOW(), null);
-INSERT INTO `dealer` VALUES (5, '上海辰龙汽车', 'chenlong', '123456', null, '15001805555', '优质好车，选择辰龙！', 1, NOW(), NOW(), null);
+INSERT INTO `dealer` VALUES (1, '上海子鼠汽车', 'zishu', '14e1b600b1fd579f47433b88e8d85291', null, '15001801111', '五星经销商，好评不断！', 1, null, NOW(), NOW(), null);
+INSERT INTO `dealer` VALUES (2, '上海丑牛汽车', 'chouniu', '14e1b600b1fd579f47433b88e8d85291', null, '15001802222', '百万客户，好评连连！', 1, null, NOW(), NOW(), null);
+INSERT INTO `dealer` VALUES (3, '上海寅虎汽车', 'yinhu', '14e1b600b1fd579f47433b88e8d85291', null, '15001803333', '您身边的汽车管家！', 1, null, NOW(), NOW(), null);
+INSERT INTO `dealer` VALUES (4, '上海卯兔汽车', 'maotu', '14e1b600b1fd579f47433b88e8d85291', null, '15001804444', '尊享服务，就在你家门口！', 1, null, NOW(), NOW(), null);
+INSERT INTO `dealer` VALUES (5, '上海辰龙汽车', 'chenlong', '14e1b600b1fd579f47433b88e8d85291', null, '15001805555', '优质好车，选择辰龙！', 1, null, NOW(), NOW(), null);
 
 /*Table structure for table `address` */
 DROP TABLE IF EXISTS `address`;
@@ -190,28 +193,29 @@ CREATE TABLE `comment` (
   PRIMARY KEY (`id`) USING BTREE 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='评价表';
 
+/* 历史遗留 */
 /*Table structure for table `article` */
-DROP TABLE IF EXISTS `article`;
-CREATE TABLE `article` (
-  `id` bigint(20) NOT NULL COMMENT '主键ID',
-  `belong_id` bigint(64) NOT NULL COMMENT '作者ID',
-  `is_top` int(11) NOT NULL DEFAULT '0' COMMENT '是否置顶 0否 1是',
-  `title` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '标题',
-  `content` varchar(500) COLLATE utf8_bin NOT NULL COMMENT '内容',
-  `car_id` bigint(20) DEFAULT NULL COMMENT '汽车ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '更新时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
-   PRIMARY KEY (`id`) USING BTREE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='文章表';
+-- DROP TABLE IF EXISTS `article`;
+-- CREATE TABLE `article` (
+--   `id` bigint(20) NOT NULL COMMENT '主键ID',
+--   `belong_id` bigint(64) NOT NULL COMMENT '作者ID',
+--   `is_top` int(11) NOT NULL DEFAULT '0' COMMENT '是否置顶 0否 1是',
+--   `title` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '标题',
+--   `content` varchar(500) COLLATE utf8_bin NOT NULL COMMENT '内容',
+--   `car_id` bigint(20) DEFAULT NULL COMMENT '汽车ID',
+--   `create_time` datetime NOT NULL COMMENT '创建时间',
+--   `update_time` datetime NOT NULL COMMENT '更新时间',
+--   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+--    PRIMARY KEY (`id`) USING BTREE
+-- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='文章表';
 
-/*Table structure for table `article_images` */
-DROP TABLE IF EXISTS `article_images`;
-CREATE TABLE `article_images` (
-  `id` bigint(20) NOT NULL COMMENT '主键ID',
-  `article_id` bigint(20) NOT NULL COMMENT '文章ID',
-  `url` varchar(500) COLLATE utf8_bin NOT NULL COMMENT '图片URL',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
-  PRIMARY KEY (`id`) USING BTREE
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='文章图片表';
+-- /*Table structure for table `article_images` */
+-- DROP TABLE IF EXISTS `article_images`;
+-- CREATE TABLE `article_images` (
+--   `id` bigint(20) NOT NULL COMMENT '主键ID',
+--   `article_id` bigint(20) NOT NULL COMMENT '文章ID',
+--   `url` varchar(500) COLLATE utf8_bin NOT NULL COMMENT '图片URL',
+--   `create_time` datetime NOT NULL COMMENT '创建时间',
+--   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+--   PRIMARY KEY (`id`) USING BTREE
+-- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='文章图片表';

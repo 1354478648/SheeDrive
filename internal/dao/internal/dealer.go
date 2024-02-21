@@ -28,6 +28,7 @@ type DealerColumns struct {
 	Phone        string // 手机号
 	DescribeInfo string // 描述信息
 	Status       string // 状态 0:禁用, 1:正常
+	Token        string // token
 	CreateTime   string // 创建时间
 	UpdateTime   string // 更新时间
 	DeleteTime   string // 删除时间
@@ -43,6 +44,7 @@ var dealerColumns = DealerColumns{
 	Phone:        "phone",
 	DescribeInfo: "describe_info",
 	Status:       "status",
+	Token:        "token",
 	CreateTime:   "create_time",
 	UpdateTime:   "update_time",
 	DeleteTime:   "delete_time",

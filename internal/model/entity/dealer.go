@@ -18,6 +18,7 @@ type Dealer struct {
 	Phone        string      `json:"phone"        ` // 手机号
 	DescribeInfo string      `json:"describeInfo" ` // 描述信息
 	Status       int         `json:"status"       ` // 状态 0:禁用, 1:正常
+	Token        string      `json:"token"        ` // token
 	CreateTime   *gtime.Time `json:"createTime"   ` // 创建时间
 	UpdateTime   *gtime.Time `json:"updateTime"   ` // 更新时间
 	DeleteTime   *gtime.Time `json:"deleteTime"   ` // 删除时间

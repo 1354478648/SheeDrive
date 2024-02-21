@@ -9,4 +9,4 @@ gfcli:
   gen:
     dao:
       link: "mysql:root:2002@tcp(localhost:3306)/sheedrive?loc=Local&parseTime=True"
-      tables: "admin,user,dealer,address,car_detail,stock,order,comment,article,article_images"
+      tables: "admin,user,dealer,address,car_detail,stock,order,comment"
