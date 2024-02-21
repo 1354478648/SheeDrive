@@ -32,7 +32,7 @@ func (*iDealer) Login(ctx context.Context, in model.DealerLoginInput) (out *mode
 	err = dao.Dealer.Ctx(ctx).Where(do.Dealer{
 		Username: in.Username,
 		Password: utility.EncryptPassword(in.Password),
-	}).Scan(&out.DealerInfoBase)
+	}).WithAll().Scan(&out.DealerInfoBase)
 	if err != nil {
 		return nil, gerror.New("用户名或密码不正确")
 	}
