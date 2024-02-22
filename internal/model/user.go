@@ -4,7 +4,7 @@ import "github.com/gogf/gf/v2/os/gtime"
 
 // 用户信息基类
 type UserInfoBase struct {
-	Id        int64  `json:"id"         ` // 主键ID
+	Id        string `json:"id"         ` // 主键ID
 	LastName  string `json:"lastName"   ` // 姓
 	FirstName string `json:"firstName"  ` // 名
 	Username  string `json:"username"   ` // 用户名
