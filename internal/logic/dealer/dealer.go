@@ -50,6 +50,13 @@ func (*iDealer) Login(ctx context.Context, in model.DealerLoginInput) (out *mode
 		return nil, gerror.New("Token保存失败")
 	}
 
+	// 将Token持久化
+	_, err = dao.Dealer.Ctx(ctx).Where(dao.Dealer.Columns().Id, out.DealerInfoBase.Id).Data(
+		do.Dealer{Token: out.Token}).Update()
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
 	return
 }
 
@@ -179,6 +186,17 @@ func (*iDealer) Update(ctx context.Context, in model.DealerUpdateInput) (err err
 
 // Delete implements service.IDealer.
 func (*iDealer) Delete(ctx context.Context, in model.DealerDeleteInput) (err error) {
+	// 删除对应id的token
+	id := in.Id
+	dealerInfo, err := service.Dealer().GetById(ctx, model.DealerGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该经销商")
+	}
+	_, err = g.Redis().Del(ctx, dealerInfo.Token)
+	if err != nil {
+		return gerror.New("重置密码失败")
+	}
+
 	// 执行删除经销商操作
 	_, err = dao.Dealer.Ctx(ctx).Where(dao.Dealer.Columns().Id, in.Id).Delete()
 	if err != nil {
@@ -190,6 +208,7 @@ func (*iDealer) Delete(ctx context.Context, in model.DealerDeleteInput) (err err
 	if err != nil {
 		return gerror.New("删除经销商地址失败")
 	}
+
 	return
 }
 
@@ -242,6 +261,17 @@ func (*iDealer) UpdatePassword(ctx context.Context, in model.DealerUpdatePasswor
 // ResetPassword implements service.IDealer.
 func (*iDealer) ResetPassword(ctx context.Context, in model.DealerResetPasswordInput) (err error) {
 	_, err = dao.Dealer.Ctx(ctx).Where(dao.Dealer.Columns().Id, in.Id).Data(do.Dealer{Password: utility.EncryptPassword(consts.DefaultPassword)}).Update()
+	if err != nil {
+		return gerror.New("重置密码失败")
+	}
+
+	// 删除对应id的token
+	id := in.Id
+	dealerInfo, err := service.Dealer().GetById(ctx, model.DealerGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该经销商")
+	}
+	_, err = g.Redis().Del(ctx, dealerInfo.Token)
 	if err != nil {
 		return gerror.New("重置密码失败")
 	}

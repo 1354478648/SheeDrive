@@ -181,6 +181,17 @@ func (*iAdmin) Update(ctx context.Context, in model.AdminUpdateInput) (err error
 
 // Delete implements service.IAdmin.
 func (*iAdmin) Delete(ctx context.Context, in model.AdminDeleteInput) (err error) {
+	// 删除对应id的token
+	id := in.Id
+	adminInfo, err := service.Admin().GetById(ctx, model.AdminGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该管理员")
+	}
+	_, err = g.Redis().Del(ctx, adminInfo.Token)
+	if err != nil {
+		return gerror.New("重置密码失败")
+	}
+
 	// 判断管理员是否具有超级权限
 	err = isRoot(ctx, in.Id)
 	if err != nil {
@@ -192,6 +203,7 @@ func (*iAdmin) Delete(ctx context.Context, in model.AdminDeleteInput) (err error
 	if err != nil {
 		return gerror.New("删除管理员失败")
 	}
+
 	return
 }
 
