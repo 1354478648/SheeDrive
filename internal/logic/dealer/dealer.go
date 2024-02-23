@@ -194,7 +194,7 @@ func (*iDealer) Delete(ctx context.Context, in model.DealerDeleteInput) (err err
 	}
 	_, err = g.Redis().Del(ctx, dealerInfo.Token)
 	if err != nil {
-		return gerror.New("重置密码失败")
+		return gerror.New("token删除失败")
 	}
 
 	// 执行删除经销商操作
@@ -255,6 +255,17 @@ func (*iDealer) UpdatePassword(ctx context.Context, in model.DealerUpdatePasswor
 		return gerror.New("更新密码失败")
 	}
 
+	// 删除对应id的token
+	id := in.Id
+	dealerInfo, err := service.Dealer().GetById(ctx, model.DealerGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该经销商")
+	}
+	_, err = g.Redis().Del(ctx, dealerInfo.Token)
+	if err != nil {
+		return gerror.New("token删除失败")
+	}
+
 	return
 }
 
@@ -273,7 +284,7 @@ func (*iDealer) ResetPassword(ctx context.Context, in model.DealerResetPasswordI
 	}
 	_, err = g.Redis().Del(ctx, dealerInfo.Token)
 	if err != nil {
-		return gerror.New("重置密码失败")
+		return gerror.New("token删除失败")
 	}
 
 	return
