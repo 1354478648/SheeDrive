@@ -253,7 +253,7 @@ func (*iAdmin) UpdatePassword(ctx context.Context, in model.AdminUpdatePasswordI
 
 	// 验证原密码
 	if utility.EncryptPassword(in.OldPassword) != oldPassword.String() {
-		return gerror.New("新旧密码不一致")
+		return gerror.New("原密码不正确")
 	}
 
 	// 更新密码
