@@ -49,7 +49,11 @@ func (*iCarDetail) GetList(ctx context.Context, in model.CarDetailGetListInput) 
 	if in.Category != "" {
 		md = md.Where(dao.CarDetail.Columns().Category, in.Category)
 	}
-	// 3.5 判断是否有关键字LowPrice和HighPrice查询
+	// 3.5 判断是否有关键字Type查询
+	if in.Type != "" {
+		md = md.Where(dao.CarDetail.Columns().Type, in.Type)
+	}
+	// 3.6 判断是否有关键字LowPrice和HighPrice查询
 	if in.LowPrice != 0 && in.HighPrice != 0 {
 		md = md.WhereBetween(dao.CarDetail.Columns().Price, in.LowPrice, in.HighPrice)
 	}
@@ -104,7 +108,6 @@ func (*iCarDetail) Add(ctx context.Context, in model.CarDetailAddInput) (out *mo
 		Version:      in.Version,
 		Image:        in.Image,
 		Category:     in.Category,
-		Color:        in.Color,
 		Price:        in.Price,
 		Type:         in.Type,
 		Seats:        in.Seats,
@@ -129,7 +132,6 @@ func (*iCarDetail) Update(ctx context.Context, in model.CarDetailUpdateInput) (e
 		Version:      in.Version,
 		Image:        in.Image,
 		Category:     in.Category,
-		Color:        in.Color,
 		Price:        in.Price,
 		Type:         in.Type,
 		Seats:        in.Seats,

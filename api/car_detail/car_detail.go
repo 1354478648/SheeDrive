@@ -16,7 +16,8 @@ type CarDetailGetListReq struct {
 	Year     string `p:"year" v:"date-format:Y#请输入正确格式的年份" dc:"年份"`
 	Brand    string `p:"brand"  dc:"品牌"`
 	Model    string `p:"model"  dc:"型号"`
-	Category string `p:"category"  dc:"类型"`
+	Category string `p:"category"  dc:"分类"`
+	Type     string `p:"type" dc:"驱动类型"`
 	// 校验规则min表示最小值，integer表示正负整数
 	// 有两种情况：价格区间可以只输入一边和如果输入两边还需要判断两边大小是否正确
 	// 但如果在这里做两边大小的校验，那么只输入一边的情况也会被做校验，因此需要在业务层做额外校验
@@ -47,7 +48,6 @@ type CarDetailAddReq struct {
 	Version      string `p:"version" v:"required#请输入版本"  dc:"版本"`
 	Image        string `p:"image" v:"required|url#请上传图片文件|请上传正确的文件路径" dc:"图片"`
 	Category     int    `p:"category" v:"required#请输入类型"  dc:"类型"`
-	Color        string `p:"color" v:"required#请输入颜色"  dc:"颜色"`
 	Price        int64  `p:"price" v:"required|min:0|integer#请输入价格|价格必须是正整数|价格必须是正整数" dc:"价格"`
 	Type         int    `p:"type" v:"required#请输入驱动类型" dc:"驱动类型"`
 	Seats        int    `p:"seats" v:"required#请输入座位数" dc:"座位数"`
@@ -68,7 +68,6 @@ type CarDetailUpdateReq struct {
 	Version      string `p:"version" v:"required#请输入版本"  dc:"版本"`
 	Image        string `p:"image" v:"required|url#请上传图片文件|请上传正确的文件路径" dc:"图片"`
 	Category     int    `p:"category" v:"required#请输入类型"  dc:"类型"`
-	Color        string `p:"color" v:"required#请输入颜色"  dc:"颜色"`
 	Price        int64  `p:"price" v:"required|min:0|integer#请输入价格|价格必须是正整数|价格必须是正整数" dc:"价格"`
 	Type         int    `p:"type" v:"required#请输入驱动类型" dc:"驱动类型"`
 	Seats        int    `p:"seats" v:"required#请输入座位数" dc:"座位数"`

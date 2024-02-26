@@ -19,7 +19,6 @@ type CarDetail struct {
 	Version      interface{} // 版本
 	Image        interface{} // 图片
 	Category     interface{} // 类型 0:其他, 1:轿车, 2:SUV, 3:MPV, 4:卡车, 5:跑车
-	Color        interface{} // 颜色
 	Price        interface{} // 指导价
 	Type         interface{} // 类型 0:其他, 1:纯电动, 2:插电混动, 3:增程, 4:汽油, 5:汽油+48V轻混系统, 6:油电混动, 7:柴油
 	Seats        interface{} // 座位数 0:7座以上 1:1座, 2:2座, 4:4座, 5:5座, 6:6座, 7:7座

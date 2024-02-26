@@ -27,7 +27,6 @@ type CarDetailColumns struct {
 	Version      string // 版本
 	Image        string // 图片
 	Category     string // 类型 0:其他, 1:轿车, 2:SUV, 3:MPV, 4:卡车, 5:跑车
-	Color        string // 颜色
 	Price        string // 指导价
 	Type         string // 类型 0:其他, 1:纯电动, 2:插电混动, 3:增程, 4:汽油, 5:汽油+48V轻混系统, 6:油电混动, 7:柴油
 	Seats        string // 座位数 0:7座以上 1:1座, 2:2座, 4:4座, 5:5座, 6:6座, 7:7座
@@ -46,7 +45,6 @@ var carDetailColumns = CarDetailColumns{
 	Version:      "version",
 	Image:        "image",
 	Category:     "category",
-	Color:        "color",
 	Price:        "price",
 	Type:         "type",
 	Seats:        "seats",

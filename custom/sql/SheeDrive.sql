@@ -117,7 +117,6 @@ CREATE TABLE `car_detail` (
   `version` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '版本',
   `image` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '图片',
   `category` int(11) NOT NULL COMMENT '类型 0:其他, 1:轿车, 2:SUV, 3:MPV, 4:卡车, 5:跑车',
-  `color` varchar(255) COLLATE utf8_bin NOT NULL COMMENT '颜色',
   `price` bigint(20) NOT NULL COMMENT '指导价',
   `type` int(11) NOT NULL COMMENT '类型 0:其他, 1:纯电动, 2:插电混动, 3:增程, 4:汽油, 5:汽油+48V轻混系统, 6:油电混动, 7:柴油',
   `seats` int(11) NOT NULL COMMENT '座位数 0:7座以上 1:1座, 2:2座, 4:4座, 5:5座, 6:6座, 7:7座',
@@ -128,16 +127,16 @@ CREATE TABLE `car_detail` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='汽车细节表';
 
-INSERT INTO `car_detail` VALUES (1, 2024, '大众', '帕萨特', '商务版', null, '1', '黑', 181900, 4, 5, '2023款 大众帕萨特 280TSI 商务版', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (2, 2024, '大众', '帕萨特', '豪华版', null, '1', '黑', 227300, 4, 5, '2023款 大众帕萨特 380TSI 豪华版', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (3, 2024, '奥迪', 'A6L', '45 TFSI 甄选致雅版', null, '1', '黑', 454900, 4, 5, '2023款 奥迪A6L 45 TFSI 甄选致雅版', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (4, 2024, '奥迪', 'A6L', '55 TFSI quattro 旗舰致雅型', null, '1', '黑', 656800, 4, 5, '2023款 奥迪A6L 55 TFSI quattro 旗舰致雅型', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (5, 2024, '保时捷', 'Cayenne', '3.0T', null, '2', '白', 948000, 4, 5, '2024款 保时捷 Cayenne 3.0T', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (6, 2023, '本田', '雅阁', '卓越版', null, '1', '黑', 213800, 4, 5, '2023款 本田雅阁 锐T动 260TURBO 卓越版', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (7, 2023, '本田', '雅阁', '卓越版', null, '1', '灰', 213800, 4, 5, '2023款 本田雅阁 锐T动 260TURBO 卓越版', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (8, 2023, '本田', 'CR-V', 'CVT两驱锋尚7座版', null, '2', '红', 208900, 4, 7, '2023款 本田CR-V 240TURBO CVT 两驱锋尚7座版', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (9, 2023, '理想', 'L9', 'Pro', null, '2', '银', 429800, 3, 7, '2023款 理想L9 Pro', NOW(), NOW(), null);
-INSERT INTO `car_detail` VALUES (10, 2022, '理想', 'L9', 'Max', null, '2', '银', 459800, 3, 7, '2022款 理想L9 Max', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (1, 2024, '大众', '帕萨特', '商务版', 'https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/pasate.jpg', '1', 181900, 4, 5, '2023款 大众帕萨特 280TSI 商务版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (2, 2024, '大众', '帕萨特', '豪华版', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/pasate.jpg", '1', 227300, 4, 5, '2023款 大众帕萨特 380TSI 豪华版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (3, 2024, '奥迪', 'A6L', '45 TFSI 甄选致雅版', 'https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/a6.jpg', '1', 454900, 4, 5, '2023款 奥迪A6L 45 TFSI 甄选致雅版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (4, 2024, '奥迪', 'A6L', '55 TFSI quattro 旗舰致雅型', 'https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/a6.jpg', '1', 656800, 4, 5, '2023款 奥迪A6L 55 TFSI quattro 旗舰致雅型', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (5, 2024, '保时捷', 'Cayenne', '3.0T', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/kayan.jpg", '2', 948000, 4, 5, '2024款 保时捷 Cayenne 3.0T', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (6, 2023, '本田', '雅阁', '卓越版', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/yage.jpg", '1', 213800, 4, 5, '2023款 本田雅阁 锐T动 260TURBO 卓越版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (7, 2023, '本田', '雅阁', '卓越版', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/yage.jpg", '1', 213800, 4, 5, '2023款 本田雅阁 锐T动 260TURBO 卓越版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (8, 2023, '本田', 'CR-V', 'CVT两驱锋尚7座版', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/crv.jpg", '2', 208900, 4, 7, '2023款 本田CR-V 240TURBO CVT 两驱锋尚7座版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (9, 2023, '理想', 'L9', 'Pro', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/l9.jpg", '2', 429800, 3, 7, '2023款 理想L9 Pro', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (10, 2022, '理想', 'L9', 'Max', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/l9.jpg", '2', 459800, 3, 7, '2022款 理想L9 Max', NOW(), NOW(), null);
 
 /*Table structure for table `stock` */
 DROP TABLE IF EXISTS `stock`;

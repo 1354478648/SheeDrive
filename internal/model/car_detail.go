@@ -17,7 +17,6 @@ type CarDetailInfoBase struct {
 	Version      string      `json:"version"     `
 	Image        string      `json:"image"       `
 	Category     int         `json:"category"    `
-	Color        string      `json:"color"       `
 	Price        int64       `json:"price"       `
 	Type         int         `json:"type"        `
 	Seats        int         `json:"seats"       `
@@ -35,7 +34,6 @@ type CarDetailAddUpdateBase struct {
 	Version      string
 	Image        string
 	Category     int
-	Color        string
 	Price        int64
 	Type         int
 	Seats        int
@@ -49,6 +47,7 @@ type CarDetailGetListInput struct {
 	Brand     string
 	Model     string
 	Category  string
+	Type      string
 	LowPrice  int64
 	HighPrice int64
 }
