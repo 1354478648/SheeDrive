@@ -13,6 +13,7 @@ type StockGetListReq struct {
 	pagination.CommonPaginationReq
 	//关键字查询可选字段
 	DealerName string `json:"dealer_name" dc:"经销商名称"`
+	CarName    string `json:"car_name" dc:"汽车名称"`
 }
 
 type StockGetListRes struct {

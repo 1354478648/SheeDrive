@@ -107,6 +107,13 @@ CREATE TABLE `address` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='地址簿';
 
+INSERT INTO `address` VALUES (1, 1, 1, '121.505531,31.233544', '上海市', '市辖区', '浦东新区', '银城中路501号', NOW(), NOW(), NULL);
+INSERT INTO `address` VALUES (2, 2, 1, '121.505531,31.233544', '上海市', '市辖区', '浦东新区', '银城中路501号', NOW(), NOW(), NULL);
+INSERT INTO `address` VALUES (3, 3, 1, '121.505531,31.233544', '上海市', '市辖区', '浦东新区', '银城中路501号', NOW(), NOW(), NULL);
+INSERT INTO `address` VALUES (4, 4, 1, '121.505531,31.233544', '上海市', '市辖区', '浦东新区', '银城中路501号', NOW(), NOW(), NULL);
+INSERT INTO `address` VALUES (5, 5, 1, '121.505531,31.233544', '上海市', '市辖区', '浦东新区', '银城中路501号', NOW(), NOW(), NULL);
+
+
 /*Table structure for table `car_detail` */
 DROP TABLE IF EXISTS `car_detail`;
 CREATE TABLE `car_detail` (

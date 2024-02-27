@@ -18,6 +18,7 @@ func (c *cStock) GetList(ctx context.Context, req *apiStock.StockGetListReq) (re
 		Page:       req.CommonPaginationReq.Page,
 		PageSize:   req.CommonPaginationReq.Size,
 		DealerName: req.DealerName,
+		CarName:    req.CarName,
 	})
 	if err != nil {
 		return nil, err

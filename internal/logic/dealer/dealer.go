@@ -204,9 +204,15 @@ func (*iDealer) Delete(ctx context.Context, in model.DealerDeleteInput) (err err
 	}
 
 	// 执行删除经销商地址操作
-	_, err = dao.Address.Ctx(ctx).Where(dao.Address.Columns().BelongId, in.Id).Delete()
+	_, err = dao.Address.Ctx(ctx).Where(dao.Address.Columns().BelongCategory, 1).Where(dao.Address.Columns().BelongId, in.Id).Delete()
 	if err != nil {
 		return gerror.New("删除经销商地址失败")
+	}
+
+	// 执行删除经销商库存操作
+	_, err = dao.Stock.Ctx(ctx).Where(dao.Stock.Columns().DealerId, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除经销商库存失败")
 	}
 
 	return

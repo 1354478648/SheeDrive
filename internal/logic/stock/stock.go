@@ -41,6 +41,13 @@ func (*iStock) GetList(ctx context.Context, in model.StockGetListInput) (out *mo
 		}
 		md = md.WhereIn(dao.Stock.Columns().DealerId, dealerId)
 	}
+	if in.CarName != "" {
+		carId, err := dao.CarDetail.Ctx(ctx).Fields("id").WhereLike("CONCAT(year, brand, model, version)", "%"+in.CarName+"%").Array()
+		if err != nil {
+			return out, err
+		}
+		md = md.WhereIn(dao.Stock.Columns().CarId, carId)
+	}
 
 	// 4. 设置排序和分页
 	md = md.OrderDesc(dao.Stock.Columns().UpdateTime).Page(in.Page, in.PageSize)

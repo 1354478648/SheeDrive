@@ -20,6 +20,7 @@ type StockGetListInput struct {
 	Page       int
 	PageSize   int
 	DealerName string
+	CarName    string
 }
 
 type StockGetListOutput struct {

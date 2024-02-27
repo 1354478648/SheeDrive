@@ -151,5 +151,11 @@ func (*iCarDetail) Delete(ctx context.Context, in model.CarDetailDeleteInput) (e
 		return gerror.New("汽车信息删除失败")
 	}
 
+	// 执行删除库存操作
+	_, err = dao.Stock.Ctx(ctx).Where(dao.Stock.Columns().CarId, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除汽车库存失败")
+	}
+
 	return
 }
