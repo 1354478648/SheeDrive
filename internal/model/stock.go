@@ -9,8 +9,6 @@ type StockInfoBase struct {
 	DealerId   int64       `json:"dealerId"  `
 	CarId      int64       `json:"carId"     `
 	CreateTime *gtime.Time `json:"createTime"`
-	UpdateTime *gtime.Time `json:"updateTime"`
-	DeleteTime *gtime.Time `json:"deleteTime"`
 
 	DealerInfo    *DealerInfoBase    `orm:"with:id=dealer_id" json:"dealerInfo"`
 	CarDetailInfo *CarDetailInfoBase `orm:"with:id=car_id" json:"carDetailInfo"`

@@ -24,8 +24,6 @@ type StockColumns struct {
 	DealerId   string // 经销商ID
 	CarId      string // 车辆ID
 	CreateTime string // 创建时间
-	UpdateTime string // 更新时间
-	DeleteTime string // 删除时间
 }
 
 // stockColumns holds the columns for table stock.
@@ -34,8 +32,6 @@ var stockColumns = StockColumns{
 	DealerId:   "dealer_id",
 	CarId:      "car_id",
 	CreateTime: "create_time",
-	UpdateTime: "update_time",
-	DeleteTime: "delete_time",
 }
 
 // NewStockDao creates and returns a new DAO object for table data access.

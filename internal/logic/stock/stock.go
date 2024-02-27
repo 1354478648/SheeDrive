@@ -50,7 +50,7 @@ func (*iStock) GetList(ctx context.Context, in model.StockGetListInput) (out *mo
 	}
 
 	// 4. 设置排序和分页
-	md = md.OrderDesc(dao.Stock.Columns().UpdateTime).Page(in.Page, in.PageSize)
+	md = md.OrderDesc(dao.Stock.Columns().CreateTime).Page(in.Page, in.PageSize)
 
 	// 5. 计算数据条数
 	out.Total, err = md.Count()
