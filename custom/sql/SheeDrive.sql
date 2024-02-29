@@ -144,6 +144,8 @@ INSERT INTO `car_detail` VALUES (7, 2023, '本田', '雅阁', '卓越版', "http
 INSERT INTO `car_detail` VALUES (8, 2023, '本田', 'CR-V', 'CVT两驱锋尚7座版', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/crv.jpg", '2', 208900, 4, 7, '2023款 本田CR-V 240TURBO CVT 两驱锋尚7座版', NOW(), NOW(), null);
 INSERT INTO `car_detail` VALUES (9, 2023, '理想', 'L9', 'Pro', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/l9.jpg", '2', 429800, 3, 7, '2023款 理想L9 Pro', NOW(), NOW(), null);
 INSERT INTO `car_detail` VALUES (10, 2022, '理想', 'L9', 'Max', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/l9.jpg", '2', 459800, 3, 7, '2022款 理想L9 Max', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (11, 2024, '沃尔沃', 'S90', 'B5 智逸豪华版', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/s90.jpg", '1', 306900, 4, 5, '2024款 沃尔沃S90 B5 智逸豪华版', NOW(), NOW(), null);
+INSERT INTO `car_detail` VALUES (12, 2024, '宝马', '5系', '525Li 豪华套装', "https://sheedrive.oss-cn-shanghai.aliyuncs.com/images/525.jpg", '1', 439900, 5, 5, '2024款 宝马5系 525Li 豪华套装', NOW(), NOW(), null);
 
 /*Table structure for table `stock` */
 DROP TABLE IF EXISTS `stock`;
@@ -196,6 +198,22 @@ CREATE TABLE `comment` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='评价表';
+
+DROP TABLE IF EXISTS `swiper`;
+CREATE TABLE `swiper` (
+  `id` bigint(20) NOT NULL COMMENT '主键ID',
+  `car_id` bigint(20) NOT NULL COMMENT '车辆ID',
+  `image_url` VARCHAR(500) NOT NULL COMMENT '图片地址',
+  `describe_info` VARCHAR(255) NOT NULL COMMENT '描述信息',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
+  PRIMARY KEY (`id`) USING BTREE 
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='轮播图表';
+
+INSERT INTO `swiper` VALUES (1, 3, "https://sheedrive.oss-cn-shanghai.aliyuncs.com/sys/lunbo-audi.jpg", "2023款 奥迪A6L 45 TFSI 甄选致雅版", NOW(), null);
+INSERT INTO `swiper` VALUES (2, 12, "https://sheedrive.oss-cn-shanghai.aliyuncs.com/sys/lunbo-bmw.jpg", "2024款 宝马5系 525Li 豪华套装", NOW(), null);
+INSERT INTO `swiper` VALUES (3, 11, "https://sheedrive.oss-cn-shanghai.aliyuncs.com/sys/lunbo-volvo.jpg", "2024款 沃尔沃S90 B5 智逸豪华版", NOW(), null);
+
 
 /* 历史遗留 */
 /*Table structure for table `article` */

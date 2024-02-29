@@ -5,6 +5,7 @@ import (
 	cardetail "SheeDrive/internal/controller/car_detail"
 	"SheeDrive/internal/controller/dealer"
 	"SheeDrive/internal/controller/file"
+	"SheeDrive/internal/controller/mobile"
 	"SheeDrive/internal/controller/stock"
 	"SheeDrive/internal/controller/user"
 	"SheeDrive/internal/service"
@@ -33,6 +34,9 @@ var (
 				})
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					group.Bind(user.UserController.UserLogin)
+				})
+				group.Group("/mobile", func(group *ghttp.RouterGroup) {
+					group.Bind(mobile.MobileController)
 				})
 				// 需要鉴权的路由组
 				group.Group("/", func(group *ghttp.RouterGroup) {
