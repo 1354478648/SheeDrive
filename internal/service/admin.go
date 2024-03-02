@@ -17,6 +17,7 @@ type IAdmin interface {
 	UpdatePassword(ctx context.Context, in model.AdminUpdatePasswordInput) (err error)
 	ResetPassword(ctx context.Context, in model.AdminResetPasswordInput) (err error)
 	UpdateAvatar(ctx context.Context, in model.AdminUpdateAvatarInput) (err error)
+	UpdatePasswordByPhone(ctx context.Context, in model.AdminUpdatePasswordByPhoneInput) (err error)
 }
 
 // 2. 定义接口变量

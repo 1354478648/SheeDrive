@@ -100,3 +100,9 @@ type AdminUpdateAvatarInput struct {
 	Id  int64
 	Url string
 }
+
+type AdminUpdatePasswordByPhoneInput struct {
+	Phone    string
+	Code     int
+	Password string
+}

@@ -30,7 +30,8 @@ CREATE TABLE `admin` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `idx_username` (`username`)
+  UNIQUE INDEX `idx_username` (`username`),
+  UNIQUE INDEX `idx_phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='管理员信息';
 
 INSERT INTO `admin` VALUES (1, '超级管理员', 'admin', '14e1b600b1fd579f47433b88e8d85291', null, '13001801111', 1, 1, null, NOW(), NOW(), null);
@@ -55,7 +56,8 @@ CREATE TABLE `user` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `idx_username` (`username`)
+  UNIQUE INDEX `idx_username` (`username`),
+  UNIQUE INDEX `idx_phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户信息';
 ALTER TABLE `user` ADD CONSTRAINT `uc_idNumber` UNIQUE (`id_number`);
 
@@ -81,7 +83,8 @@ CREATE TABLE `dealer`(
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `idx_username` (`username`)
+  UNIQUE INDEX `idx_username` (`username`),
+  UNIQUE INDEX `idx_phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='经销商信息';
 
 INSERT INTO `dealer` VALUES (1, '上海子鼠汽车', 'zishu', '14e1b600b1fd579f47433b88e8d85291', null, '15001801111', '五星经销商，好评不断！', 1, null, NOW(), NOW(), null);

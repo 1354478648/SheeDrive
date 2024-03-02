@@ -178,3 +178,17 @@ func (c *cDealer) DealerUpdateAvatar(ctx context.Context, req *apiDealer.DealerU
 
 	return
 }
+
+// 管理员通过手机号修改密码
+func (c *cDealer) DealerUpdatePasswordByPhone(ctx context.Context, req *apiDealer.DealerUpdatePasswordByPhoneReq) (res *apiDealer.DealerUpdatePasswordByPhoneRes, err error) {
+	err = service.Dealer().UpdatePasswordByPhone(ctx, model.DealerUpdatePasswordByPhoneInput{
+		Phone:    req.Phone,
+		Code:     req.Code,
+		Password: req.NewPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}

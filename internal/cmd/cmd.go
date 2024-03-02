@@ -6,6 +6,7 @@ import (
 	"SheeDrive/internal/controller/dealer"
 	"SheeDrive/internal/controller/file"
 	"SheeDrive/internal/controller/mobile"
+	"SheeDrive/internal/controller/sms"
 	"SheeDrive/internal/controller/stock"
 	"SheeDrive/internal/controller/user"
 	"SheeDrive/internal/service"
@@ -28,15 +29,20 @@ var (
 				// 无需鉴权的路由组
 				group.Group("/admin", func(group *ghttp.RouterGroup) {
 					group.Bind(admin.AdminController.AdminLogin)
+					group.Bind(admin.AdminController.AdminUpdatePasswordByPhone)
 				})
 				group.Group("/dealer", func(group *ghttp.RouterGroup) {
 					group.Bind(dealer.DealerController.DealerLogin)
+					group.Bind(dealer.DealerController.DealerUpdatePasswordByPhone)
 				})
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					group.Bind(user.UserController.UserLogin)
 				})
 				group.Group("/mobile", func(group *ghttp.RouterGroup) {
 					group.Bind(mobile.MobileController)
+				})
+				group.Group("/sms", func(group *ghttp.RouterGroup) {
+					group.Bind(sms.SmsController)
 				})
 				// 需要鉴权的路由组
 				group.Group("/", func(group *ghttp.RouterGroup) {

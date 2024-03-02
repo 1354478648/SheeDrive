@@ -105,3 +105,9 @@ type DealerUpdateAvatarInput struct {
 	Id  int64
 	Url string
 }
+
+type DealerUpdatePasswordByPhoneInput struct {
+	Phone    string
+	Code     int
+	Password string
+}

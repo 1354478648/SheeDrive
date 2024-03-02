@@ -9,6 +9,7 @@ import (
 	"SheeDrive/utility"
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
@@ -125,7 +126,13 @@ func (*iDealer) Add(ctx context.Context, in model.DealerAddInput) (out *model.De
 		Status:       1,
 	}).InsertAndGetId()
 	if err != nil {
-		return out, gerror.New("用户名已被占用")
+		if strings.Contains(err.Error(), "idx_username") {
+			return out, gerror.New("该用户名已存在")
+		}
+		if strings.Contains(err.Error(), "idx_phone") {
+			return out, gerror.New("该手机号已存在")
+		}
+		return out, gerror.New("经销商添加失败")
 	}
 	out.Id = id
 
@@ -162,7 +169,13 @@ func (*iDealer) Update(ctx context.Context, in model.DealerUpdateInput) (err err
 		DescribeInfo: in.DescribeInfo,
 	}).Update()
 	if err != nil {
-		return gerror.New("用户名已被占用")
+		if strings.Contains(err.Error(), "idx_username") {
+			return gerror.New("该用户名已存在")
+		}
+		if strings.Contains(err.Error(), "idx_phone") {
+			return gerror.New("该手机号已存在")
+		}
+		return gerror.New("经销商修改失败")
 	}
 
 	//执行修改经销商地址操作
@@ -302,6 +315,38 @@ func (*iDealer) UpdateAvatar(ctx context.Context, in model.DealerUpdateAvatarInp
 	_, err = dao.Dealer.Ctx(ctx).Where(dao.Dealer.Columns().Id, in.Id).Data(do.Dealer{Avatar: in.Url}).Update()
 	if err != nil {
 		return gerror.New("修改头像失败")
+	}
+	return
+}
+
+// UpdatePasswordByPhone implements service.IDealer.
+func (i *iDealer) UpdatePasswordByPhone(ctx context.Context, in model.DealerUpdatePasswordByPhoneInput) (err error) {
+	// 验证码验证
+	code, err := g.Redis().Get(ctx, in.Phone)
+	if err != nil {
+		return gerror.New("验证码获取失败")
+	}
+	if code.Int() == 0 {
+		return gerror.New("验证码已过期")
+	}
+	if code.Int() != in.Code {
+		return gerror.New("验证码错误")
+	}
+	// 修改密码
+	result, err := dao.Dealer.Ctx(ctx).Data(do.Dealer{Password: utility.EncryptPassword(in.Password)}).Where(dao.Dealer.Columns().Phone, in.Phone).Update()
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	row, err := result.RowsAffected()
+	if row == 0 {
+		return gerror.New("手机号不存在")
+	}
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	_, err = g.Redis().Del(ctx, in.Phone)
+	if err != nil {
+		return gerror.New("验证码删除失败")
 	}
 	return
 }

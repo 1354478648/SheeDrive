@@ -8,6 +8,7 @@ import (
 	"SheeDrive/internal/service"
 	"SheeDrive/utility"
 	"context"
+	"strings"
 
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
@@ -149,7 +150,13 @@ func (*iAdmin) Add(ctx context.Context, in model.AdminAddInput) (out *model.Admi
 		IsRoot:   0,
 	}).InsertAndGetId()
 	if err != nil {
-		return out, gerror.New("用户名已被占用")
+		if strings.Contains(err.Error(), "idx_username") {
+			return out, gerror.New("该用户名已存在")
+		}
+		if strings.Contains(err.Error(), "idx_phone") {
+			return out, gerror.New("该手机号已存在")
+		}
+		return out, gerror.New("管理员添加失败")
 	}
 
 	// 将自增主键id赋值给响应结构体
@@ -174,7 +181,13 @@ func (*iAdmin) Update(ctx context.Context, in model.AdminUpdateInput) (err error
 			Phone:    in.Phone,
 		}).Update()
 	if err != nil {
-		return gerror.New("用户名已被占用")
+		if strings.Contains(err.Error(), "idx_username") {
+			return gerror.New("该用户名已存在")
+		}
+		if strings.Contains(err.Error(), "idx_phone") {
+			return gerror.New("该手机号已存在")
+		}
+		return gerror.New("管理员修改失败")
 	}
 	return
 }
@@ -310,6 +323,38 @@ func (*iAdmin) UpdateAvatar(ctx context.Context, in model.AdminUpdateAvatarInput
 	_, err = dao.Admin.Ctx(ctx).Data(do.Admin{Avatar: in.Url}).Where(dao.Admin.Columns().Id, in.Id).Update()
 	if err != nil {
 		return gerror.New("修改头像失败")
+	}
+	return
+}
+
+// UpdatePasswordByPhone implements service.IAdmin.
+func (i *iAdmin) UpdatePasswordByPhone(ctx context.Context, in model.AdminUpdatePasswordByPhoneInput) (err error) {
+	// 验证码验证
+	code, err := g.Redis().Get(ctx, in.Phone)
+	if err != nil {
+		return gerror.New("验证码获取失败")
+	}
+	if code.Int() == 0 {
+		return gerror.New("验证码已过期")
+	}
+	if code.Int() != in.Code {
+		return gerror.New("验证码错误")
+	}
+	// 修改密码
+	result, err := dao.Admin.Ctx(ctx).Data(do.Admin{Password: utility.EncryptPassword(in.Password)}).Where(dao.Admin.Columns().Phone, in.Phone).Update()
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	row, err := result.RowsAffected()
+	if row == 0 {
+		return gerror.New("手机号不存在")
+	}
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	_, err = g.Redis().Del(ctx, in.Phone)
+	if err != nil {
+		return gerror.New("验证码删除失败")
 	}
 	return
 }

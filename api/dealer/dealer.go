@@ -117,3 +117,14 @@ type DealerUpdateAvatarReq struct {
 }
 
 type DealerUpdateAvatarRes struct{}
+
+// 通过手机号修改密码
+type DealerUpdatePasswordByPhoneReq struct {
+	g.Meta          `path:"/updatePasswordByPhone" method:"put"`
+	Phone           string `p:"phone" v:"required|phone#请输入手机号|手机号格式不正确" dc:"手机号"`
+	Code            int    `p:"code" v:"required#请输入验证码" dc:"验证码"`
+	NewPassword     string `p:"newPassword" v:"required|password|same:ConfirmPassword#请输入新密码|密码格式不正确（任意可见字符，长度在6~18之间）|两次密码输入不一致" dc:"新密码"`
+	ConfirmPassword string `p:"confirmPassword" v:"required|password|same:NewPassword#请输入确认密码|密码格式不正确（任意可见字符，长度在6~18之间）|两次密码输入不一致" dc:"确认密码"`
+}
+
+type DealerUpdatePasswordByPhoneRes struct{}

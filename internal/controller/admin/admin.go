@@ -170,3 +170,17 @@ func (c *cAdmin) AdminUpdateAvatar(ctx context.Context, req *apiAdmin.AdminUpdat
 	}
 	return
 }
+
+// 管理员通过手机号修改密码
+func (c *cAdmin) AdminUpdatePasswordByPhone(ctx context.Context, req *apiAdmin.AdminUpdatePasswordByPhoneReq) (res *apiAdmin.AdminUpdatePasswordByPhoneRes, err error) {
+	err = service.Admin().UpdatePasswordByPhone(ctx, model.AdminUpdatePasswordByPhoneInput{
+		Phone:    req.Phone,
+		Code:     req.Code,
+		Password: req.NewPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}

@@ -1,7 +1,9 @@
 package utility
 
 import (
+	"math/rand"
 	"strconv"
+	"time"
 
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -28,4 +30,9 @@ func GetBirthDay(idNumber string) *gtime.Time {
 	birthday, _ := gtime.StrToTimeFormat(birthdayStr, "Y-m-d H:i:s")
 
 	return birthday
+}
+
+// 生成六位随机验证码
+func GenRandomCode() int {
+	return rand.New(rand.NewSource(time.Now().UnixNano())).Intn(900000) + 100000
 }

@@ -17,6 +17,7 @@ type IDealer interface {
 	UpdatePassword(ctx context.Context, in model.DealerUpdatePasswordInput) (err error)
 	ResetPassword(ctx context.Context, in model.DealerResetPasswordInput) (err error)
 	UpdateAvatar(ctx context.Context, in model.DealerUpdateAvatarInput) (err error)
+	UpdatePasswordByPhone(ctx context.Context, in model.DealerUpdatePasswordByPhoneInput) (err error)
 }
 
 // 2. 定义接口变量
