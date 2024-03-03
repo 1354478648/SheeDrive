@@ -6,7 +6,7 @@ import (
 
 // 获取轮播图
 type MobileGetSwiperReq struct {
-	g.Meta `path:"/getSwiper" method:"get" summary:"获取轮播图"`
+	g.Meta `path:"/getSwiper" method:"get"`
 }
 
 type MobileGetSwiperRes struct {
