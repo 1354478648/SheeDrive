@@ -20,10 +20,17 @@ type UserLoginRes struct {
 	UserInfo model.UserInfoBase `json:"user_info" dc:"用户信息"`
 }
 
-// // 用户短信验证码发送
-// type UserSendSmsCodeReq struct {
-//     g.Meta
-// }
+// 用户通过手机号登录
+type UserLoginByPhoneReq struct {
+	g.Meta `path:"/loginByPhone" method:"post"`
+	Phone  string `p:"phone" v:"required|phone#请输入您的联系电话|请输入正确格式的联系电话" dc:"联系电话"`
+	Code   int    `p:"code" v:"required#请输入验证码" dc:"验证码"`
+}
+
+type UserLoginByPhoneRes struct {
+	Token    string             `json:"token" dc:"验证Token"`
+	UserInfo model.UserInfoBase `json:"user_info" dc:"用户信息"`
+}
 
 // 用户注册
 type UserRegisterReq struct {

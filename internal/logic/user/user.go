@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/gogf/gf/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 )
 
 type iUser struct{}
@@ -39,7 +40,27 @@ func (*iUser) Login(ctx context.Context, in model.UserLoginInput) (out *model.Us
 		return nil, gerror.New("该用户已被禁用")
 	}
 
+	// 生成token
+	out.Token = utility.GenToken(in.Username)
+	// 将token保存到redis中
+	err = g.Redis().SetEX(ctx, out.Token, out.Token, 86400)
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
+	// 将Token持久化
+	_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, out.UserInfoBase.Id).Data(
+		do.Admin{Token: out.Token}).Update()
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
 	return
+}
+
+// LoginByPhone implements service.IUser.
+func (*iUser) LoginByPhone(ctx context.Context, in model.UserLoginByPhoneInput) (out *model.UserLoginByPhoneOutput, err error) {
+	panic("unimplemented")
 }
 
 // Register implements service.IUser.
@@ -141,10 +162,23 @@ func (*iUser) GetById(ctx context.Context, in model.UserGetByIdInput) (out *mode
 
 // Delete implements service.IUser.
 func (*iUser) Delete(ctx context.Context, in model.UserDeleteInput) (err error) {
+	// 删除对应id的token
+	id := in.Id
+	userInfo, err := service.User().GetById(ctx, model.UserGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该用户")
+	}
+	_, err = g.Redis().Del(ctx, userInfo.Token)
+	if err != nil {
+		return gerror.New("token删除失败")
+	}
+
+	// 执行删除操作
 	_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, in.Id).Delete()
 	if err != nil {
 		return gerror.New("删除用户失败")
 	}
+
 	return
 }
 
@@ -172,6 +206,18 @@ func (*iUser) UpdatePassword(ctx context.Context, in model.UserUpdatePasswordInp
 	if err != nil {
 		return gerror.New("修改密码失败")
 	}
+
+	// 删除对应id的token
+	id := in.Id
+	userInfo, err := service.User().GetById(ctx, model.UserGetByIdInput{Id: id})
+	if err != nil {
+		return gerror.New("未找到该用户")
+	}
+	_, err = g.Redis().Del(ctx, userInfo.Token)
+	if err != nil {
+		return gerror.New("token删除失败")
+	}
+
 	return
 }
 

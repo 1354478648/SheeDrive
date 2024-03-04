@@ -8,6 +8,7 @@ import (
 // 1. 定义接口
 type IUser interface {
 	Login(ctx context.Context, in model.UserLoginInput) (out *model.UserLoginOutput, err error)
+	LoginByPhone(ctx context.Context, in model.UserLoginByPhoneInput) (out *model.UserLoginByPhoneOutput, err error)
 	Register(ctx context.Context, in model.UserRegisterInput) (out *model.UserRegisterOutput, err error)
 	GetList(ctx context.Context, in model.UserGetListInput) (out *model.UserGetListOutput, err error)
 	GetById(ctx context.Context, in model.UserGetByIdInput) (out *model.UserGetByIdOutput, err error)

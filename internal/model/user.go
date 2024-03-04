@@ -28,6 +28,18 @@ type UserLoginInput struct {
 }
 
 type UserLoginOutput struct {
+	Token string `json:"token"`
+	UserInfoBase
+}
+
+// 用户通过手机号登录
+type UserLoginByPhoneInput struct {
+	Phone string
+	Code  int
+}
+
+type UserLoginByPhoneOutput struct {
+	Token string `json:"token"`
 	UserInfoBase
 }
 

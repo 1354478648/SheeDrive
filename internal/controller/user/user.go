@@ -5,7 +5,6 @@ import (
 	apiUser "SheeDrive/api/user"
 	"SheeDrive/internal/model"
 	"SheeDrive/internal/service"
-	"SheeDrive/utility"
 	"context"
 )
 
@@ -24,7 +23,23 @@ func (c *cUser) UserLogin(ctx context.Context, req *apiUser.UserLoginReq) (res *
 		return nil, err
 	}
 	res = &apiUser.UserLoginRes{
-		Token:    utility.GenToken(user.Username),
+		Token:    user.Token,
+		UserInfo: user.UserInfoBase,
+	}
+	return
+}
+
+// 用户通过手机号登录
+func (c *cUser) UserLoginByPhone(ctx context.Context, req *apiUser.UserLoginByPhoneReq) (res *apiUser.UserLoginByPhoneRes, err error) {
+	user, err := service.User().LoginByPhone(ctx, model.UserLoginByPhoneInput{
+		Phone: req.Phone,
+		Code:  req.Code,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiUser.UserLoginByPhoneRes{
+		Token:    user.Token,
 		UserInfo: user.UserInfoBase,
 	}
 	return
