@@ -16,6 +16,7 @@ type IUser interface {
 	UpdateStatus(ctx context.Context, in model.UserUpdateStatusInput) (err error)
 	UpdatePassword(ctx context.Context, in model.UserUpdatePasswordInput) (err error)
 	UpdateAvatar(ctx context.Context, in model.UserUpdateAvatarInput) (err error)
+	UpdatePasswordByPhone(ctx context.Context, in model.UserUpdatePasswordByPhoneInput) (err error)
 }
 
 // 2. 定义接口变量

@@ -37,6 +37,8 @@ var (
 				})
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					group.Bind(user.UserController.UserLogin)
+					group.Bind(user.UserController.UserLoginByPhone)
+					group.Bind(user.UserController.UserUpdatePasswordByPhone)
 				})
 				group.Group("/mobile", func(group *ghttp.RouterGroup) {
 					group.Bind(mobile.MobileController)

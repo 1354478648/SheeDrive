@@ -99,3 +99,9 @@ type UserUpdateAvatarInput struct {
 	Id  int64
 	Url string
 }
+
+type UserUpdatePasswordByPhoneInput struct {
+	Phone    string
+	Code     int
+	Password string
+}

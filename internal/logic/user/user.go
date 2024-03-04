@@ -60,7 +60,53 @@ func (*iUser) Login(ctx context.Context, in model.UserLoginInput) (out *model.Us
 
 // LoginByPhone implements service.IUser.
 func (*iUser) LoginByPhone(ctx context.Context, in model.UserLoginByPhoneInput) (out *model.UserLoginByPhoneOutput, err error) {
-	panic("unimplemented")
+	out = &model.UserLoginByPhoneOutput{}
+
+	// 验证码验证
+	code, err := g.Redis().Get(ctx, in.Phone)
+	if err != nil {
+		return nil, gerror.New("验证码获取失败")
+	}
+	if code.Int() == 0 {
+		return nil, gerror.New("验证码已过期")
+	}
+	if code.Int() != in.Code {
+		return nil, gerror.New("验证码错误")
+	}
+
+	err = dao.User.Ctx(ctx).Where(do.User{
+		Phone: in.Phone,
+	}).Scan(&out.UserInfoBase)
+	if err != nil {
+		return nil, gerror.New("用户不存在")
+	}
+	// 判断用户状态是否被禁用
+	if out.UserInfoBase.Status == 0 {
+		return nil, gerror.New("该用户已被禁用")
+	}
+
+	// 生成token
+	out.Token = utility.GenToken(in.Phone)
+	// 将token保存到redis中
+	err = g.Redis().SetEX(ctx, out.Token, out.Token, 86400)
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
+	// 将Token持久化
+	_, err = dao.User.Ctx(ctx).Where(dao.User.Columns().Id, out.UserInfoBase.Id).Data(
+		do.Admin{Token: out.Token}).Update()
+	if err != nil {
+		return nil, gerror.New("Token保存失败")
+	}
+
+	// 删除验证码
+	_, err = g.Redis().Del(ctx, in.Phone)
+	if err != nil {
+		return nil, gerror.New("验证码删除失败")
+	}
+
+	return
 }
 
 // Register implements service.IUser.
@@ -241,6 +287,38 @@ func (*iUser) UpdateStatus(ctx context.Context, in model.UserUpdateStatusInput) 
 		if err != nil {
 			return gerror.New("用户状态切换失败")
 		}
+	}
+	return
+}
+
+// UpdatePasswordByPhone implements service.IUser.
+func (*iUser) UpdatePasswordByPhone(ctx context.Context, in model.UserUpdatePasswordByPhoneInput) (err error) {
+	// 验证码验证
+	code, err := g.Redis().Get(ctx, in.Phone)
+	if err != nil {
+		return gerror.New("验证码获取失败")
+	}
+	if code.Int() == 0 {
+		return gerror.New("验证码已过期")
+	}
+	if code.Int() != in.Code {
+		return gerror.New("验证码错误")
+	}
+	// 修改密码
+	result, err := dao.User.Ctx(ctx).Data(do.User{Password: utility.EncryptPassword(in.Password)}).Where(dao.User.Columns().Phone, in.Phone).Update()
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	row, err := result.RowsAffected()
+	if row == 0 {
+		return gerror.New("手机号不存在")
+	}
+	if err != nil {
+		return gerror.New("修改密码失败")
+	}
+	_, err = g.Redis().Del(ctx, in.Phone)
+	if err != nil {
+		return gerror.New("验证码删除失败")
 	}
 	return
 }

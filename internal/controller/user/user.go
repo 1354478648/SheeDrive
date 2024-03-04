@@ -148,3 +148,17 @@ func (c *cUser) UserUpdateAvatar(ctx context.Context, req *apiUser.UserUpdateAva
 	}
 	return
 }
+
+// 用户通过手机号修改密码
+func (c *cUser) UserUpdatePasswordByPhone(ctx context.Context, req *apiUser.UserUpdatePasswordByPhoneReq) (res *apiUser.UserUpdatePasswordByPhoneRes, err error) {
+	err = service.User().UpdatePasswordByPhone(ctx, model.UserUpdatePasswordByPhoneInput{
+		Phone:    req.Phone,
+		Code:     req.Code,
+		Password: req.NewPassword,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return
+}
