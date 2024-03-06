@@ -37,6 +37,7 @@ var (
 				})
 				group.Group("/user", func(group *ghttp.RouterGroup) {
 					group.Bind(user.UserController.UserLogin)
+					group.Bind(user.UserController.UserRegister)
 					group.Bind(user.UserController.UserLoginByPhone)
 					group.Bind(user.UserController.UserUpdatePasswordByPhone)
 				})
@@ -80,7 +81,6 @@ var (
 							user.UserController.UserDelete,
 							user.UserController.UserGetById,
 							user.UserController.UserGetList,
-							user.UserController.UserRegister,
 							user.UserController.UserUpdateAvatar,
 							user.UserController.UserUpdatePassword,
 							user.UserController.UserUpdateStatus,
