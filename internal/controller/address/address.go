@@ -61,3 +61,31 @@ func (c *cAddress) UserAddressGetById(ctx context.Context, req *apiAddress.UserA
 	}
 	return
 }
+
+// 用户地址修改
+func (c *cAddress) UserAddressUpdate(ctx context.Context, req *apiAddress.UserAddressUpdateReq) (res *apiAddress.UserAddressUpdateRes, err error) {
+	err = service.Address().Update(ctx, model.UserAddressUpdateInput{
+		Id: req.Id,
+		UserAddressAddUpdateBase: model.UserAddressAddUpdateBase{
+			Province: req.Province,
+			City:     req.City,
+			District: req.District,
+			Detail:   req.DetailAddress,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+// 用户地址删除
+func (c *cAddress) UserAddressDelete(ctx context.Context, req *apiAddress.UserAddressDeleteReq) (res *apiAddress.UserAddressDeleteRes, err error) {
+	err = service.Address().Delete(ctx, model.UserAddressDeleteInput{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return
+}

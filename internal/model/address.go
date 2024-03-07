@@ -52,3 +52,12 @@ type UserAddressGetByIdInput struct {
 type UserAddressGetByIdOutput struct {
 	AddressInfoBase
 }
+
+type UserAddressUpdateInput struct {
+	Id int64
+	UserAddressAddUpdateBase
+}
+
+type UserAddressDeleteInput struct {
+	Id int64
+}

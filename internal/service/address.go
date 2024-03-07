@@ -10,8 +10,8 @@ type IAddress interface {
 	GetList(ctx context.Context, in model.UserAddressGetListInput) (out *model.UserAddressGetListOutput, err error)
 	Add(ctx context.Context, in model.UserAddressAddInput) (out *model.UserAddressAddOutput, err error)
 	GetById(ctx context.Context, in model.UserAddressGetByIdInput) (out *model.UserAddressGetByIdOutput, err error)
-	// Update(ctx context.Context, in model.AddressUpdateInput) (err error)
-	// Delete(ctx context.Context, in model.AddressDeleteInput) (err error)
+	Update(ctx context.Context, in model.UserAddressUpdateInput) (err error)
+	Delete(ctx context.Context, in model.UserAddressDeleteInput) (err error)
 }
 
 // 2. 定义接口变量
