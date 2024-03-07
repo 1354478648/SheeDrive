@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"SheeDrive/internal/controller/address"
 	"SheeDrive/internal/controller/admin"
 	cardetail "SheeDrive/internal/controller/car_detail"
 	"SheeDrive/internal/controller/dealer"
@@ -94,6 +95,9 @@ var (
 					})
 					group.Group("/stock", func(group *ghttp.RouterGroup) {
 						group.Bind(stock.StockController)
+					})
+					group.Group("/address", func(group *ghttp.RouterGroup) {
+						group.Bind(address.AddressController)
 					})
 				})
 			})
