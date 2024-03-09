@@ -48,3 +48,16 @@ type StockAddOutput struct {
 type StockDeleteInput struct {
 	Id int64
 }
+
+type StockGetByCarIdInput struct {
+	Page     int
+	PageSize int
+	CarId    int64
+}
+
+type StockGetByCarIdOutput struct {
+	Page     int             `json:"page"`
+	PageSize int             `json:"page_size"`
+	Total    int             `json:"total"`
+	Items    []StockInfoBase `json:"items"`
+}

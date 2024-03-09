@@ -23,7 +23,7 @@ func (c *cAddress) UserAddressGetList(ctx context.Context, req *apiAddress.UserA
 	}
 
 	res = &apiAddress.UserAddressGetListRes{
-		AddressInfo: out.AddressInfoBase,
+		AddressInfoList: out.Items,
 	}
 	return
 }

@@ -76,3 +76,24 @@ func (c *cStock) StockDelete(ctx context.Context, req *apiStock.StockDeleteReq) 
 	}
 	return
 }
+
+// 库存通过汽车ID查询
+func (c *cStock) StockGetByCarId(ctx context.Context, req *apiStock.StockGetByCarIdReq) (res *apiStock.StockGetByCarIdRes, err error) {
+	out, err := service.Stock().GetByCarId(ctx, model.StockGetByCarIdInput{
+		Page:     req.CommonPaginationReq.Page,
+		PageSize: req.CommonPaginationReq.Size,
+		CarId:    req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiStock.StockGetByCarIdRes{
+		CommonPaginationRes: apiPagination.CommonPaginationRes{
+			Page:  out.Page,
+			Size:  out.PageSize,
+			Total: out.Total,
+			List:  out.Items,
+		},
+	}
+	return
+}

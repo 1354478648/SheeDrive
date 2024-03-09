@@ -47,3 +47,14 @@ type StockDeleteReq struct {
 }
 
 type StockDeleteRes struct{}
+
+// 库存通过汽车ID查询
+type StockGetByCarIdReq struct {
+	g.Meta `path:"/getByCarId" method:"get"`
+	pagination.CommonPaginationReq
+	Id int64 `p:"id" v:"required#请输入Id" dc:"id"`
+}
+
+type StockGetByCarIdRes struct {
+	pagination.CommonPaginationRes
+}

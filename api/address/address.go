@@ -13,7 +13,7 @@ type UserAddressGetListReq struct {
 }
 
 type UserAddressGetListRes struct {
-	AddressInfo model.AddressInfoBase `json:"addressInfo" dc:"用户地址信息"`
+	AddressInfoList interface{} `json:"addressInfoList" dc:"用户地址信息列表"`
 }
 
 // 用户地址添加

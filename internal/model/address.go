@@ -3,7 +3,7 @@ package model
 import "github.com/gogf/gf/v2/os/gtime"
 
 type AddressInfoBase struct {
-	Id             int64       `json:"id"             ` // 主键ID
+	Id             string      `json:"id"             ` // 主键ID
 	BelongId       int64       `json:"belongId"       ` // 所属ID
 	BelongCategory int         `json:"belongCategory" ` // 所属分类 1:经销商,2:用户
 	LngLat         string      `json:"lngLat"         ` // 经纬度
@@ -32,7 +32,7 @@ type UserAddressGetListInput struct {
 }
 
 type UserAddressGetListOutput struct {
-	AddressInfoBase
+	Items []AddressInfoBase `json:"items"`
 }
 
 // 用户地址添加

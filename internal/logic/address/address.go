@@ -26,7 +26,7 @@ func init() {
 func (i *iAddress) GetList(ctx context.Context, in model.UserAddressGetListInput) (out *model.UserAddressGetListOutput, err error) {
 	out = &model.UserAddressGetListOutput{}
 
-	err = dao.Address.Ctx(ctx).Where(dao.Address.Columns().BelongId, in.BelongId).Where(dao.Address.Columns().BelongCategory, in.BelongCategory).Scan(&out.AddressInfoBase)
+	err = dao.Address.Ctx(ctx).Where(dao.Address.Columns().BelongId, in.BelongId).Where(dao.Address.Columns().BelongCategory, in.BelongCategory).Scan(&out.Items)
 	if err != nil {
 		return out, gerror.New("地址不存在")
 	}

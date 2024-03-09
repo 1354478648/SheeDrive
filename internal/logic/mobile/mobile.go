@@ -28,8 +28,5 @@ func (*iMobile) GetSwiper(ctx context.Context) (out *model.MobileGetSwiperOutput
 	if err != nil {
 		return nil, gerror.New("未找到轮播图数据")
 	}
-	if err != nil {
-		return nil, gerror.New("未找到轮播图数据")
-	}
 	return
 }

@@ -16,9 +16,6 @@ func (c *cMobile) MobileGetSwiper(ctx context.Context, req *apiMobile.MobileGetS
 	if err != nil {
 		return nil, err
 	}
-	if err != nil {
-		return nil, err
-	}
 	res = &apiMobile.MobileGetSwiperRes{
 		SwiperInfoList: out.Items,
 	}

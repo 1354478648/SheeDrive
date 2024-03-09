@@ -11,6 +11,7 @@ type IStock interface {
 	GetById(ctx context.Context, in model.StockGetByIdInput) (out *model.StockGetByIdOutput, err error)
 	Add(ctx context.Context, in model.StockAddInput) (out *model.StockAddOutput, err error)
 	Delete(ctx context.Context, in model.StockDeleteInput) (err error)
+	GetByCarId(ctx context.Context, in model.StockGetByCarIdInput) (out *model.StockGetByCarIdOutput, err error)
 }
 
 // 2. 定义接口变量
