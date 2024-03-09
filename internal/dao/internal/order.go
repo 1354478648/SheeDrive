@@ -26,6 +26,7 @@ type OrderColumns struct {
 	CarId       string // 车辆ID
 	AddrId      string // 用户地址ID
 	Status      string // 订单状态 -1:异常,0:取消,1:未确认,2:已确认,3:签署协议,4:试驾中,5:试驾结束,6:待评价,7:已评价
+	OrderTime   string // 预定时间
 	ConfirmTime string // 确认时间
 	SignTime    string // 签署协议时间
 	StartTime   string // 试驾开始时间
@@ -44,6 +45,7 @@ var orderColumns = OrderColumns{
 	CarId:       "car_id",
 	AddrId:      "addr_id",
 	Status:      "status",
+	OrderTime:   "order_time",
 	ConfirmTime: "confirm_time",
 	SignTime:    "sign_time",
 	StartTime:   "start_time",

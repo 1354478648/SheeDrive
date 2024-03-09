@@ -1,9 +1,13 @@
 package model
 
-import "github.com/gogf/gf/v2/os/gtime"
+import (
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
 // 用户信息基类
 type UserInfoBase struct {
+	g.Meta    `orm:"table:user"`
 	Id        string `json:"id"         ` // 主键ID
 	LastName  string `json:"lastName"   ` // 姓
 	FirstName string `json:"firstName"  ` // 名

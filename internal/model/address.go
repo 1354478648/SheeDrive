@@ -1,6 +1,8 @@
 package model
 
-import "github.com/gogf/gf/v2/os/gtime"
+import (
+	"github.com/gogf/gf/v2/os/gtime"
+)
 
 type AddressInfoBase struct {
 	Id             string      `json:"id"             ` // 主键ID

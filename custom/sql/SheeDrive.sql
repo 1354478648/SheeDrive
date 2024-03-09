@@ -177,6 +177,7 @@ CREATE TABLE `order` (
   `car_id` bigint(20) NOT NULL COMMENT '车辆ID',
   `addr_id` bigint(20) NOT NULL COMMENT '用户地址ID',
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '订单状态 -1:异常,0:取消,1:未确认,2:已确认,3:签署协议,4:试驾中,5:试驾结束,6:待评价,7:已评价',
+  `order_time` date NOT NULL COMMENT '预定时间',
   `confirm_time` datetime DEFAULT NULL COMMENT '确认时间',
   `sign_time` datetime DEFAULT NULL COMMENT '签署协议时间',
   `start_time` datetime DEFAULT NULL COMMENT '试驾开始时间',
@@ -187,6 +188,8 @@ CREATE TABLE `order` (
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
   PRIMARY KEY (`id`) USING BTREE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='订单表';
+
+INSERT INTO `order` VALUES (1, 1, 1, 1, 7171452416485756929, 1, "2024-04-01", null,null,null,null,null,NOW(), NOW(), null);
 
 /*Table structure for table `comment` */
 DROP TABLE IF EXISTS `comment`;
