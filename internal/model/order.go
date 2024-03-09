@@ -1,8 +1,6 @@
 package model
 
 import (
-	"SheeDrive/internal/model/do"
-
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
@@ -26,7 +24,7 @@ type OrderInfoBase struct {
 	UserInfo      *UserInfoBase      `orm:"with:id=user_id" json:"userInfo"`
 	DealerInfo    *DealerInfoBase    `orm:"with:id=dealer_id" json:"dealerInfo"`
 	CarDetailInfo *CarDetailInfoBase `orm:"with:id=car_id" json:"carDetailInfo"`
-	Address       *do.Address        `orm:"with:belong_id=id" json:"address"`
+	Address       *AddressInfoBase   `orm:"with:id=addr_id" json:"address"`
 }
 
 type OrderGetListInput struct {
@@ -44,4 +42,32 @@ type OrderGetListOutput struct {
 	PageSize int             `json:"page_size"`
 	Total    int             `json:"total"`
 	Items    []OrderInfoBase `json:"items"`
+}
+
+type OrderGetByIdInput struct {
+	Id int64
+}
+
+type OrderGetByIdOutput struct {
+	OrderInfoBase
+}
+
+type OrderAddInput struct {
+	UserId    int64
+	DealerId  int64
+	CarId     int64
+	AddrId    int64
+	OrderTime *gtime.Time
+}
+
+type OrderAddOutput struct {
+	OrderInfoBase
+}
+
+type OrderDeleteInput struct {
+	Id int64
+}
+
+type OrderUpdateInput struct {
+	Id int64
 }

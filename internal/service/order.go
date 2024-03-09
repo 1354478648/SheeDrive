@@ -8,10 +8,14 @@ import (
 // 1. 定义接口
 type IOrder interface {
 	GetList(ctx context.Context, in model.OrderGetListInput) (out *model.OrderGetListOutput, err error)
-	// GetById(ctx context.Context, in model.OrderGetByIdInput) (out *model.OrderGetByIdOutput, err error)
-	// Add(ctx context.Context, in model.OrderAddInput) (out *model.OrderAddOutput, err error)
-	// Delete(ctx context.Context, in model.OrderDeleteInput) (err error)
-	// GetByCarId(ctx context.Context, in model.OrderGetByCarIdInput) (out *model.OrderGetByCarIdOutput, err error)
+	GetById(ctx context.Context, in model.OrderGetByIdInput) (out *model.OrderGetByIdOutput, err error)
+	Add(ctx context.Context, in model.OrderAddInput) (out *model.OrderAddOutput, err error)
+	Delete(ctx context.Context, in model.OrderDeleteInput) (err error)
+	UpdateCancel(ctx context.Context, in model.OrderUpdateInput) (err error)
+	UpdateConfirm(ctx context.Context, in model.OrderUpdateInput) (err error)
+	UpdateSign(ctx context.Context, in model.OrderUpdateInput) (err error)
+	UpdateStart(ctx context.Context, in model.OrderUpdateInput) (err error)
+	UpdateEnd(ctx context.Context, in model.OrderUpdateInput) (err error)
 }
 
 // 2. 定义接口变量

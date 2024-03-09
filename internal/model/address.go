@@ -1,10 +1,12 @@
 package model
 
 import (
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
 type AddressInfoBase struct {
+	g.Meta         `orm:"table:address"`
 	Id             string      `json:"id"             ` // 主键ID
 	BelongId       int64       `json:"belongId"       ` // 所属ID
 	BelongCategory int         `json:"belongCategory" ` // 所属分类 1:经销商,2:用户
