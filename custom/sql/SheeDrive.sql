@@ -182,6 +182,7 @@ CREATE TABLE `order` (
   `sign_time` datetime DEFAULT NULL COMMENT '签署协议时间',
   `start_time` datetime DEFAULT NULL COMMENT '试驾开始时间',
   `end_time` datetime DEFAULT NULL COMMENT '试驾结束时间',
+  `precomment_time` datetime DEFAULT NULL COMMENT '试驾待评价时间',
   `comment_time` datetime DEFAULT NULL COMMENT '评价时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '更新时间',
@@ -189,7 +190,8 @@ CREATE TABLE `order` (
   PRIMARY KEY (`id`) USING BTREE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='订单表';
 
-INSERT INTO `order` VALUES (1, 1, 1, 1, 7171452416485756929, 1, "2024-04-01", null,null,null,null,null,NOW(), NOW(), null);
+INSERT INTO `order` VALUES (1, 1, 1, 1, 7171452416485756929, 1, "2024-04-01", null,null,null,null,null,null,NOW(), NOW(), null);
+INSERT INTO `order` VALUES (2, 1, 3, 6, 7171452416485756929, 1, "2024-04-02", null,null,null,null,null,null,NOW(), NOW(), null);
 
 /*Table structure for table `comment` */
 DROP TABLE IF EXISTS `comment`;

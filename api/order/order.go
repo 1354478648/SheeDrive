@@ -88,3 +88,10 @@ type OrderUpdateEndReq struct {
 }
 
 type OrderUpdateEndRes struct{}
+
+type OrderUpdateEndAllReq struct {
+	g.Meta `path:"/update/endAll" method:"put"`
+	Id     int64 `p:"id" v:"required#请输入Id" dc:"id"`
+}
+
+type OrderUpdateEndAllRes struct{}

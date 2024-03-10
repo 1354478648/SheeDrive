@@ -16,6 +16,7 @@ type IOrder interface {
 	UpdateSign(ctx context.Context, in model.OrderUpdateInput) (err error)
 	UpdateStart(ctx context.Context, in model.OrderUpdateInput) (err error)
 	UpdateEnd(ctx context.Context, in model.OrderUpdateInput) (err error)
+	UpdateEndAll(ctx context.Context, in model.OrderUpdateInput) (err error)
 }
 
 // 2. 定义接口变量

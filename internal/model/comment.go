@@ -3,7 +3,7 @@ package model
 import "github.com/gogf/gf/v2/os/gtime"
 
 type CommentInfoBase struct {
-	Id          int64       `json:"id"          ` // 主键ID
+	Id          string      `json:"id"          ` // 主键ID
 	OrderId     int64       `json:"orderId"     ` // 订单ID
 	Content     string      `json:"content"     ` // 评价内容
 	TotalScore  int         `json:"totalScore"  ` // 总评分 1~5星

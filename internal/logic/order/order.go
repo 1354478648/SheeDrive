@@ -128,7 +128,7 @@ func (i *iOrder) Delete(ctx context.Context, in model.OrderDeleteInput) (err err
 
 // UpdateCancel implements service.IOrder.
 func (i *iOrder) UpdateCancel(ctx context.Context, in model.OrderUpdateInput) (err error) {
-	_, err = dao.Order.Ctx(ctx).Data(do.Order{
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Data(do.Order{
 		Status: 0,
 	}).Update()
 	if err != nil {
@@ -139,7 +139,7 @@ func (i *iOrder) UpdateCancel(ctx context.Context, in model.OrderUpdateInput) (e
 
 // UpdateConfirm implements service.IOrder.
 func (i *iOrder) UpdateConfirm(ctx context.Context, in model.OrderUpdateInput) (err error) {
-	_, err = dao.Order.Ctx(ctx).Data(do.Order{
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Data(do.Order{
 		Status:      2,
 		ConfirmTime: gtime.Now(),
 	}).Update()
@@ -151,7 +151,7 @@ func (i *iOrder) UpdateConfirm(ctx context.Context, in model.OrderUpdateInput) (
 
 // UpdateEnd implements service.IOrder.
 func (i *iOrder) UpdateEnd(ctx context.Context, in model.OrderUpdateInput) (err error) {
-	_, err = dao.Order.Ctx(ctx).Data(do.Order{
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Data(do.Order{
 		Status:  5,
 		EndTime: gtime.Now(),
 	}).Update()
@@ -163,7 +163,7 @@ func (i *iOrder) UpdateEnd(ctx context.Context, in model.OrderUpdateInput) (err 
 
 // UpdateSign implements service.IOrder.
 func (i *iOrder) UpdateSign(ctx context.Context, in model.OrderUpdateInput) (err error) {
-	_, err = dao.Order.Ctx(ctx).Data(do.Order{
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Data(do.Order{
 		Status:   3,
 		SignTime: gtime.Now(),
 	}).Update()
@@ -175,12 +175,24 @@ func (i *iOrder) UpdateSign(ctx context.Context, in model.OrderUpdateInput) (err
 
 // UpdateStart implements service.IOrder.
 func (i *iOrder) UpdateStart(ctx context.Context, in model.OrderUpdateInput) (err error) {
-	_, err = dao.Order.Ctx(ctx).Data(do.Order{
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Data(do.Order{
 		Status:    4,
 		StartTime: gtime.Now(),
 	}).Update()
 	if err != nil {
 		return gerror.New("订单开始试驾失败")
+	}
+	return
+}
+
+// UpdateEndAll implements service.IOrder.
+func (i *iOrder) UpdateEndAll(ctx context.Context, in model.OrderUpdateInput) (err error) {
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Data(do.Order{
+		Status:         6,
+		PrecommentTime: gtime.Now(),
+	}).Update()
+	if err != nil {
+		return gerror.New("订单切换至待评价状态失败")
 	}
 	return
 }

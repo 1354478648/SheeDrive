@@ -122,3 +122,12 @@ func (c *cOrder) OrderUpdateEnd(ctx context.Context, req *apiOrder.OrderUpdateEn
 	}
 	return
 }
+
+// 订单改为待评价状态
+func (c *cOrder) OrderUpdateEndAll(ctx context.Context, req *apiOrder.OrderUpdateEndAllReq) (res *apiOrder.OrderUpdateEndAllRes, err error) {
+	err = service.Order().UpdateEndAll(ctx, model.OrderUpdateInput{Id: req.Id})
+	if err != nil {
+		return nil, err
+	}
+	return
+}
