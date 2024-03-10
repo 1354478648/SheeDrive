@@ -157,5 +157,21 @@ func (*iCarDetail) Delete(ctx context.Context, in model.CarDetailDeleteInput) (e
 		return gerror.New("删除汽车库存失败")
 	}
 
+	// 执行删除评价操作
+	orderId, err := dao.Order.Ctx(ctx).Fields("id").Where(dao.Order.Columns().CarId, in.Id).Array()
+	if err != nil {
+		return gerror.New("未找到该汽车下的订单")
+	}
+	_, err = dao.Comment.Ctx(ctx).WhereIn(dao.Comment.Columns().OrderId, orderId).Delete()
+	if err != nil {
+		return gerror.New("删除评价失败")
+	}
+
+	// 执行删除订单操作
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().CarId, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除订单失败")
+	}
+
 	return
 }

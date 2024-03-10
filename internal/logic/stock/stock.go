@@ -95,10 +95,30 @@ func (*iStock) Add(ctx context.Context, in model.StockAddInput) (out *model.Stoc
 
 // Delete implements service.IStock.
 func (*iStock) Delete(ctx context.Context, in model.StockDeleteInput) (err error) {
+	stock, err := service.Stock().GetById(ctx, model.StockGetByIdInput{Id: in.Id})
+	if err != nil {
+		return gerror.New("该库存信息不存在")
+	}
+	carId := stock.StockInfoBase.CarId
+	orderId, err := dao.Order.Ctx(ctx).Fields("id").Where(dao.Order.Columns().CarId, carId).Array()
+	if err != nil {
+		return gerror.New("未找到该库存下的订单")
+	}
+	_, err = dao.Comment.Ctx(ctx).WhereIn(dao.Comment.Columns().OrderId, orderId).Delete()
+	if err != nil {
+		return gerror.New("删除评价失败")
+	}
+	// 执行删除订单操作
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().CarId, carId).Delete()
+	if err != nil {
+		return gerror.New("删除订单失败")
+	}
+
 	_, err = dao.Stock.Ctx(ctx).Where(dao.Stock.Columns().Id, in.Id).Delete()
 	if err != nil {
 		return gerror.New("删除库存失败")
 	}
+
 	return
 }
 

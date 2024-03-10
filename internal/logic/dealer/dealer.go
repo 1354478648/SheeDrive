@@ -228,6 +228,22 @@ func (*iDealer) Delete(ctx context.Context, in model.DealerDeleteInput) (err err
 		return gerror.New("删除经销商库存失败")
 	}
 
+	// 执行删除评价操作
+	orderId, err := dao.Order.Ctx(ctx).Fields("id").Where(dao.Order.Columns().DealerId, in.Id).Array()
+	if err != nil {
+		return gerror.New("未找到该经销商下的订单")
+	}
+	_, err = dao.Comment.Ctx(ctx).WhereIn(dao.Comment.Columns().OrderId, orderId).Delete()
+	if err != nil {
+		return gerror.New("删除评价失败")
+	}
+
+	// 执行删除订单操作
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().DealerId, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除订单失败")
+	}
+
 	return
 }
 

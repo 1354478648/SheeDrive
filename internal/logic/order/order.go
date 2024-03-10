@@ -119,6 +119,12 @@ func (i *iOrder) Add(ctx context.Context, in model.OrderAddInput) (out *model.Or
 
 // Delete implements service.IOrder.
 func (i *iOrder) Delete(ctx context.Context, in model.OrderDeleteInput) (err error) {
+	// 执行删除评价操作
+	_, err = dao.Comment.Ctx(ctx).WhereIn(dao.Comment.Columns().OrderId, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除评价失败")
+	}
+
 	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.Id).Delete()
 	if err != nil {
 		return gerror.New("删除订单失败")

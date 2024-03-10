@@ -84,7 +84,22 @@ func (i *iAddress) Delete(ctx context.Context, in model.UserAddressDeleteInput) 
 		return gerror.New("地址删除失败")
 	}
 
-	// 或许要删除订单
+	// 经销商不可能删除地址，因此只有用户删除地址的情况
+	// 执行删除评价操作
+	orderId, err := dao.Order.Ctx(ctx).Fields("id").Where(dao.Order.Columns().AddrId, in.Id).Array()
+	if err != nil {
+		return gerror.New("未找到该地址下的订单")
+	}
+	_, err = dao.Comment.Ctx(ctx).WhereIn(dao.Comment.Columns().OrderId, orderId).Delete()
+	if err != nil {
+		return gerror.New("删除评价失败")
+	}
+
+	// 执行删除订单操作
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().AddrId, in.Id).Delete()
+	if err != nil {
+		return gerror.New("删除订单失败")
+	}
 
 	return
 }
