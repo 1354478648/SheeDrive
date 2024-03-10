@@ -4,6 +4,7 @@ import (
 	"SheeDrive/internal/controller/address"
 	"SheeDrive/internal/controller/admin"
 	cardetail "SheeDrive/internal/controller/car_detail"
+	"SheeDrive/internal/controller/comment"
 	"SheeDrive/internal/controller/dealer"
 	"SheeDrive/internal/controller/file"
 	"SheeDrive/internal/controller/mobile"
@@ -102,6 +103,9 @@ var (
 					})
 					group.Group("/order", func(group *ghttp.RouterGroup) {
 						group.Bind(order.OrderController)
+					})
+					group.Group("/comment", func(group *ghttp.RouterGroup) {
+						group.Bind(comment.CommentController)
 					})
 				})
 			})

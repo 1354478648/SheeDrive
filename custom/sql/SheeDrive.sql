@@ -202,7 +202,8 @@ CREATE TABLE `comment` (
   `car_score` int(11) NOT NULL COMMENT '汽车评分 1~5星',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `delete_time` datetime DEFAULT NULL COMMENT '删除时间',
-  PRIMARY KEY (`id`) USING BTREE 
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `idx_order_id` (`order_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='评价表';
 
 DROP TABLE IF EXISTS `swiper`;

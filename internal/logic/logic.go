@@ -4,6 +4,7 @@ import (
 	_ "SheeDrive/internal/logic/address"
 	_ "SheeDrive/internal/logic/admin"
 	_ "SheeDrive/internal/logic/car_detail"
+	_ "SheeDrive/internal/logic/comment"
 	_ "SheeDrive/internal/logic/dealer"
 	_ "SheeDrive/internal/logic/middleware"
 	_ "SheeDrive/internal/logic/mobile"

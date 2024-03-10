@@ -1,10 +1,12 @@
 package model
 
 import (
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 )
 
 type OrderInfoBase struct {
+	g.Meta      `orm:"table:order"`
 	Id          int64       `json:"id"          ` // 主键ID
 	UserId      int64       `json:"userId"      ` // 用户ID
 	DealerId    int64       `json:"dealerId"    ` // 经销商ID
