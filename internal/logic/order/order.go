@@ -202,3 +202,35 @@ func (i *iOrder) UpdateEndAll(ctx context.Context, in model.OrderUpdateInput) (e
 	}
 	return
 }
+
+// GetCarRank implements service.IOrder.
+func (i *iOrder) GetCarRank(ctx context.Context) (out *model.OrderGetCarRankOutput, err error) {
+	out = &model.OrderGetCarRankOutput{}
+
+	result, err := dao.Order.Ctx(ctx).Group("car_id").Fields("car_id, COUNT(car_id) AS Times").OrderDesc("Times").Limit(10).All()
+	if err != nil {
+		return out, gerror.New("汽车排行数据查询失败")
+	}
+
+	carInfoList := make([]model.CarRankBase, 0)
+	for _, r := range result {
+		carID := r["car_id"].Int64()
+
+		// 查询汽车名
+		carName, err := service.CarDetail().GetById(ctx, model.CarDetailGetByIdInput{Id: carID})
+		if err != nil {
+			return nil, gerror.New("汽车名查询失败")
+		}
+
+		// 组装结果
+		carInfo := model.CarRankBase{
+			CarInfo: carName.CarDetail,
+			Times:   r["Times"].Int(),
+		}
+		carInfoList = append(carInfoList, carInfo)
+	}
+
+	out.Items = carInfoList
+
+	return
+}

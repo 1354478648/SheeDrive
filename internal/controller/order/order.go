@@ -131,3 +131,20 @@ func (c *cOrder) OrderUpdateEndAll(ctx context.Context, req *apiOrder.OrderUpdat
 	}
 	return
 }
+
+// 获取汽车排行
+func (c *cOrder) OrderGetCarRank(ctx context.Context, req *apiOrder.OrderGetCarRankReq) (res *apiOrder.OrderGetCarRankRes, err error) {
+	out, err := service.Order().GetCarRank(ctx)
+	if err != nil {
+		return nil, err
+	}
+	res = &apiOrder.OrderGetCarRankRes{
+		CommonPaginationRes: apiPagination.CommonPaginationRes{
+			Page:  1,
+			Size:  10,
+			Total: 10,
+			List:  out.Items,
+		},
+	}
+	return
+}

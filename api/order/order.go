@@ -95,3 +95,12 @@ type OrderUpdateEndAllReq struct {
 }
 
 type OrderUpdateEndAllRes struct{}
+
+// 获取汽车排行
+type OrderGetCarRankReq struct {
+	g.Meta `path:"/get/carRank" method:"get"`
+}
+
+type OrderGetCarRankRes struct {
+	pagination.CommonPaginationRes
+}

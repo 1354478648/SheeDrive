@@ -23,7 +23,23 @@ type Geocode struct {
 	District         string      `json:"district" dc:"区"`
 	Street           string      `json:"street" dc:"街道"`
 	Number           interface{} `json:"number" dc:"门牌号"`
+	Adcode           string      `json:"adcode" dc:"区域编码"`
 	Location         string      `json:"location" dc:"经纬度"`
+}
+
+type WeatherResponse struct {
+	Lives []Lives `json:"lives"`
+}
+
+type Lives struct {
+	Province      string `json:"province" dc:"省"` // 也可以是市
+	City          string `json:"city" dc:"市"`     // 也可以是区
+	Weather       string `json:"weather" dc:"天气现象"`
+	Temperature   string `json:"temperature" dc:"温度"`
+	Winddirection string `json:"winddirection" dc:"风向"`
+	Windpower     string `json:"windpower" dc:"风力等级"`
+	Humidity      string `json:"humidity" dc:"空气湿度"`
+	Reporttime    string `json:"reporttime" dc:"数据发布时间"`
 }
 
 // type ReGeocodeResponse struct {
@@ -77,6 +93,39 @@ func Geocoding(address, city string) (geocode *Geocode, err error) {
 	// 返回的可能有多个数据，选择第一个
 	if len(response.Geocodes) > 0 {
 		return &response.Geocodes[0], nil
+	}
+	return nil, gerror.New("未找到匹配的地址")
+}
+
+// 获取天气数据
+func GetWeather(adcode string) (lives *Lives, err error) {
+	// 设置高德地图地理编码API的URL和参数
+	url := "https://restapi.amap.com/v3/weather/weatherInfo"
+	parameters := fmt.Sprintf("?key=%s&city=%s", consts.GaodeKey, adcode)
+
+	// 发送HTTP请求
+	result, err := http.Get(url + parameters)
+	if err != nil {
+		return nil, gerror.New("发送高德API请求时发生错误")
+	}
+	defer result.Body.Close()
+
+	// 读取响应内容
+	body, err := io.ReadAll(result.Body)
+	if err != nil {
+		return nil, gerror.New("读取高德API响应时发生错误")
+	}
+
+	// 解析JSON数据
+	var response WeatherResponse
+	err = json.Unmarshal([]byte(body), &response)
+	if err != nil {
+		return nil, gerror.New("解析JSON数据时发生错误")
+	}
+
+	// 返回的可能有多个数据，选择第一个
+	if len(response.Lives) > 0 {
+		return &response.Lives[0], nil
 	}
 	return nil, gerror.New("未找到匹配的地址")
 }

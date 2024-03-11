@@ -1,6 +1,8 @@
 package model
 
 import (
+	"SheeDrive/internal/model/entity"
+
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gtime"
 )
@@ -73,4 +75,13 @@ type OrderDeleteInput struct {
 
 type OrderUpdateInput struct {
 	Id int64
+}
+
+type CarRankBase struct {
+	CarInfo entity.CarDetail `json:"carInfo"`
+	Times   int              `json:"times"`
+}
+
+type OrderGetCarRankOutput struct {
+	Items []CarRankBase `json:"items"`
 }
