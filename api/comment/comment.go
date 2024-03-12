@@ -51,3 +51,12 @@ type CommentDeleteReq struct {
 }
 
 type CommentDeleteRes struct{}
+
+type CommentGetAvgReq struct {
+	g.Meta   `path:"/get/avg" method:"get"`
+	DealerId int64 `p:"dealerId" v:"required#请输入经销商ID" dc:"经销商ID"`
+}
+
+type CommentGetAvgRes struct {
+	Avg float64 `json:"avg" dc:"平均评分"`
+}

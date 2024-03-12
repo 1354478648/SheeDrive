@@ -113,3 +113,23 @@ type OrderGetIncompleteReq struct {
 type OrderGetIncompleteRes struct {
 	Total int `json:"total" dc:"未完成订单数"`
 }
+
+type OrderGetAddressTimesReq struct {
+	g.Meta   `path:"/get/address/times" method:"get"`
+	DealerId int64 `p:"dealer_id" v:"required#请输入经销商ID" dc:"经销商名称"`
+}
+
+type OrderGetAddressTimesRes struct {
+	pagination.CommonPaginationRes
+}
+
+type OrderGetTimeCountReq struct {
+	g.Meta   `path:"/get/times" method:"get"`
+	DealerId int64 `p:"dealer_id" v:"required#请输入经销商ID" dc:"经销商名称"`
+}
+
+type OrderGetTimeCountRes struct {
+	// 切片有顺序
+	TimeSeries []string `json:"timeSeries"`
+	OrderCount []int    `json:"orderCount"`
+}

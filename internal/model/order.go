@@ -93,3 +93,25 @@ type OrderGetIncompleteInput struct {
 type OrderGetIncompleteOutput struct {
 	Total int `json:"total"`
 }
+
+type OrderAddressTimesBase struct {
+	AddressInfo AddressInfoBase `json:"addressInfo"`
+	Times       int             `json:"times"`
+}
+
+type OrderGetAddressTimesInput struct {
+	DealerId int64
+}
+
+type OrderGetAddressTimesOutput struct {
+	Items []OrderAddressTimesBase `json:"items"`
+}
+
+type OrderGetTimeCountInput struct {
+	DealerId int64
+}
+
+type OrderGetTimeCountOutput struct {
+	TimeSeries []string `json:"timeSeries"`
+	OrderCount []int    `json:"orderCount"`
+}

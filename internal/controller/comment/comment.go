@@ -77,3 +77,17 @@ func (c *cComment) CommentDelete(ctx context.Context, req *apiComment.CommentDel
 	}
 	return
 }
+
+func (c *cComment) CommentGetAvg(ctx context.Context, req *apiComment.CommentGetAvgReq) (res *apiComment.CommentGetAvgRes, err error) {
+	out, err := service.Comment().GetAvg(ctx, model.CommentGetAvgInput{
+		DealerId: req.DealerId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiComment.CommentGetAvgRes{
+		Avg: out.Avg,
+	}
+
+	return
+}

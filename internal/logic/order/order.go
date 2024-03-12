@@ -249,3 +249,71 @@ func (i *iOrder) GetIncomplete(ctx context.Context, in model.OrderGetIncompleteI
 
 	return
 }
+
+// GetAddressTimes implements service.IOrder.
+func (i *iOrder) GetAddressTimes(ctx context.Context, in model.OrderGetAddressTimesInput) (out *model.OrderGetAddressTimesOutput, err error) {
+	out = &model.OrderGetAddressTimesOutput{}
+
+	result, err := dao.Order.Ctx(ctx).Where(dao.Order.Columns().DealerId, in.DealerId).Group(dao.Order.Columns().AddrId).Fields(dao.Order.Columns().AddrId, "count(*) as Times").Limit(10).All()
+	if err != nil {
+		return out, gerror.New("查询地址次数失败")
+	}
+
+	addrInfoList := make([]model.OrderAddressTimesBase, 0)
+	for _, r := range result {
+		addrId := r["addr_id"].Int64()
+
+		// 查询地址
+		addrAndTimes, err := service.Address().GetById(ctx, model.UserAddressGetByIdInput{Id: addrId})
+		if err != nil {
+			return out, gerror.New("查询地址失败")
+		}
+
+		// 组装结果
+		addrInfo := model.OrderAddressTimesBase{
+			AddressInfo: addrAndTimes.AddressInfoBase,
+			Times:       r["Times"].Int(),
+		}
+		addrInfoList = append(addrInfoList, addrInfo)
+	}
+
+	out.Items = addrInfoList
+
+	return
+}
+
+// GetTimeCount implements service.IOrder.
+func (i *iOrder) GetTimeCount(ctx context.Context, in model.OrderGetTimeCountInput) (out *model.OrderGetTimeCountOutput, err error) {
+	out = &model.OrderGetTimeCountOutput{}
+
+	// 获取当前时间
+	// now := gtime.New(gtime.Date())
+
+	// 获取未来7天的日期
+	for i := 0; i < 7; i++ {
+		date := gtime.New(gtime.Date()).AddDate(0, 0, i).Format("Y-m-d")
+		out.TimeSeries = append(out.TimeSeries, date)
+	}
+
+	result, err := dao.Order.Ctx(ctx).
+		Where(dao.Order.Columns().DealerId, in.DealerId).
+		Fields("COUNT(*) AS order_count").
+		Where("order_time >= CURDATE() AND order_time < DATE_ADD(CURDATE(), INTERVAL 7 DAY)").
+		Group("DATE(order_time)").All()
+
+	if err != nil {
+		return out, gerror.New("查询订单数量失败")
+	}
+
+	for _, item := range result {
+		out.OrderCount = append(out.OrderCount, item["order_count"].Int())
+	}
+
+	for len(out.OrderCount) < 7 {
+		out.OrderCount = append(out.OrderCount, 0)
+	}
+
+	// .Scan(&out.OrderCount)
+
+	return
+}

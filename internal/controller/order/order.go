@@ -161,3 +161,33 @@ func (c *cOrder) OrderGetIncomplete(ctx context.Context, req *apiOrder.OrderGetI
 	}
 	return
 }
+
+// 获取地址出现次数
+func (c *cOrder) OrderGetAddressTimes(ctx context.Context, req *apiOrder.OrderGetAddressTimesReq) (res *apiOrder.OrderGetAddressTimesRes, err error) {
+	out, err := service.Order().GetAddressTimes(ctx, model.OrderGetAddressTimesInput{DealerId: req.DealerId})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiOrder.OrderGetAddressTimesRes{
+		CommonPaginationRes: apiPagination.CommonPaginationRes{
+			Page:  1,
+			Size:  10,
+			Total: 10,
+			List:  out.Items,
+		},
+	}
+	return
+}
+
+func (c *cOrder) OrderGetTimeCount(ctx context.Context, req *apiOrder.OrderGetTimeCountReq) (res *apiOrder.OrderGetTimeCountRes, err error) {
+	out, err := service.Order().GetTimeCount(ctx, model.OrderGetTimeCountInput{DealerId: req.DealerId})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiOrder.OrderGetTimeCountRes{
+		TimeSeries: out.TimeSeries,
+		OrderCount: out.OrderCount,
+	}
+
+	return
+}

@@ -113,3 +113,18 @@ func (i *iComment) Delete(ctx context.Context, in model.CommentDeleteInput) (err
 	}
 	return
 }
+
+// GetAvg implements service.IComment.
+func (i *iComment) GetAvg(ctx context.Context, in model.CommentGetAvgInput) (out *model.CommentGetAvgOutput, err error) {
+	out = &model.CommentGetAvgOutput{}
+
+	orderId, err := dao.Order.Ctx(ctx).Fields(dao.Order.Columns().Id).Where(dao.Order.Columns().DealerId, in.DealerId).Array()
+	if err != nil {
+		return nil, gerror.New("获取订单列表失败")
+	}
+	avg, err := dao.Comment.Ctx(ctx).WhereIn(dao.Comment.Columns().OrderId, orderId).Avg(dao.Comment.Columns().DealerScore)
+
+	out.Avg = avg
+
+	return
+}

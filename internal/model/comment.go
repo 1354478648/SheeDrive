@@ -55,3 +55,11 @@ type CommentAddOutput struct {
 type CommentDeleteInput struct {
 	Id int64
 }
+
+type CommentGetAvgInput struct {
+	DealerId int64
+}
+
+type CommentGetAvgOutput struct {
+	Avg float64 `json:"avg"`
+}
