@@ -148,3 +148,16 @@ func (c *cOrder) OrderGetCarRank(ctx context.Context, req *apiOrder.OrderGetCarR
 	}
 	return
 }
+
+func (c *cOrder) OrderGetIncomplete(ctx context.Context, req *apiOrder.OrderGetIncompleteReq) (res *apiOrder.OrderGetIncompleteRes, err error) {
+	out, err := service.Order().GetIncomplete(ctx, model.OrderGetIncompleteInput{
+		DealerId: req.DealerId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiOrder.OrderGetIncompleteRes{
+		Total: out.Total,
+	}
+	return
+}

@@ -104,3 +104,12 @@ type OrderGetCarRankReq struct {
 type OrderGetCarRankRes struct {
 	pagination.CommonPaginationRes
 }
+
+type OrderGetIncompleteReq struct {
+	g.Meta   `path:"/get/incomplete" method:"get"`
+	DealerId int64 `p:"dealer_id" v:"required#请输入经销商ID" dc:"经销商名称"`
+}
+
+type OrderGetIncompleteRes struct {
+	Total int `json:"total" dc:"未完成订单数"`
+}

@@ -85,3 +85,11 @@ type CarRankBase struct {
 type OrderGetCarRankOutput struct {
 	Items []CarRankBase `json:"items"`
 }
+
+type OrderGetIncompleteInput struct {
+	DealerId int64
+}
+
+type OrderGetIncompleteOutput struct {
+	Total int `json:"total"`
+}

@@ -234,3 +234,18 @@ func (i *iOrder) GetCarRank(ctx context.Context) (out *model.OrderGetCarRankOutp
 
 	return
 }
+
+// GetIncomplete implements service.IOrder.
+func (i *iOrder) GetIncomplete(ctx context.Context, in model.OrderGetIncompleteInput) (out *model.OrderGetIncompleteOutput, err error) {
+	out = &model.OrderGetIncompleteOutput{}
+
+	result, err := dao.Order.Ctx(ctx).Where(dao.Order.Columns().DealerId, in.DealerId).WhereNotIn(dao.Order.Columns().Status, []int{-1, 0, 7}).Count()
+
+	if err != nil {
+		return out, gerror.New("查询未完成的订单数量失败")
+	}
+
+	out.Total = result
+
+	return
+}

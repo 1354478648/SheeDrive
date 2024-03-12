@@ -18,6 +18,7 @@ type IOrder interface {
 	UpdateEnd(ctx context.Context, in model.OrderUpdateInput) (err error)
 	UpdateEndAll(ctx context.Context, in model.OrderUpdateInput) (err error)
 	GetCarRank(ctx context.Context) (out *model.OrderGetCarRankOutput, err error)
+	GetIncomplete(ctx context.Context, in model.OrderGetIncompleteInput) (out *model.OrderGetIncompleteOutput, err error)
 }
 
 // 2. 定义接口变量
