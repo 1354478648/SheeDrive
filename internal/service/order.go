@@ -21,6 +21,7 @@ type IOrder interface {
 	GetIncomplete(ctx context.Context, in model.OrderGetIncompleteInput) (out *model.OrderGetIncompleteOutput, err error)
 	GetAddressTimes(ctx context.Context, in model.OrderGetAddressTimesInput) (out *model.OrderGetAddressTimesOutput, err error)
 	GetTimeCount(ctx context.Context, in model.OrderGetTimeCountInput) (out *model.OrderGetTimeCountOutput, err error)
+	GetByUserId(ctx context.Context, in model.OrderGetByUserIdInput) (out *model.OrderGetByUserIdOutput, err error)
 }
 
 // 2. 定义接口变量

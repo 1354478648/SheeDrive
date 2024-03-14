@@ -133,3 +133,13 @@ type OrderGetTimeCountRes struct {
 	TimeSeries []string `json:"timeSeries"`
 	OrderCount []int    `json:"orderCount"`
 }
+
+type OrderGetByUserIdReq struct {
+	g.Meta `path:"/getByUserId" method:"get"`
+	pagination.CommonPaginationReq
+	UserId int64 `p:"userId" v:"required#请输入用户ID" dc:"用户ID"`
+}
+
+type OrderGetByUserIdRes struct {
+	pagination.CommonPaginationRes
+}

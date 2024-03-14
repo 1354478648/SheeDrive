@@ -191,3 +191,23 @@ func (c *cOrder) OrderGetTimeCount(ctx context.Context, req *apiOrder.OrderGetTi
 
 	return
 }
+
+func (c *cOrder) OrderGetByUserId(ctx context.Context, req *apiOrder.OrderGetByUserIdReq) (res *apiOrder.OrderGetByUserIdRes, err error) {
+	out, err := service.Order().GetByUserId(ctx, model.OrderGetByUserIdInput{
+		Page:     req.CommonPaginationReq.Page,
+		PageSize: req.CommonPaginationReq.Size,
+		UserId:   req.UserId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiOrder.OrderGetByUserIdRes{
+		CommonPaginationRes: apiPagination.CommonPaginationRes{
+			Page:  out.Page,
+			Size:  out.PageSize,
+			Total: out.Total,
+			List:  out.Items,
+		},
+	}
+	return
+}

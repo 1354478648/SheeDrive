@@ -317,3 +317,31 @@ func (i *iOrder) GetTimeCount(ctx context.Context, in model.OrderGetTimeCountInp
 
 	return
 }
+
+// GetByUserId implements service.IOrder.
+func (i *iOrder) GetByUserId(ctx context.Context, in model.OrderGetByUserIdInput) (out *model.OrderGetByUserIdOutput, err error) {
+	// 1. 实例化响应结构体
+	out = &model.OrderGetByUserIdOutput{
+		Page:     in.Page,
+		PageSize: in.PageSize,
+	}
+
+	// 2. 获取*gdb.Model对象
+	var (
+		md = dao.Order.Ctx(ctx)
+	)
+
+	// 4. 设置排序和分页
+	md = md.Where(dao.Order.Columns().UserId, in.UserId).OrderDesc(dao.Order.Columns().CreateTime).Page(in.Page, in.PageSize)
+
+	// 5. 计算数据条数
+	out.Total, err = md.Count()
+	if err != nil || out.Total == 0 {
+		return out, err
+	}
+
+	// 6. 关联查询
+	md.WithAll().Scan(&out.Items)
+
+	return
+}

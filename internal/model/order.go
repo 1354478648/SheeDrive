@@ -115,3 +115,16 @@ type OrderGetTimeCountOutput struct {
 	TimeSeries []string `json:"timeSeries"`
 	OrderCount []int    `json:"orderCount"`
 }
+
+type OrderGetByUserIdInput struct {
+	Page     int
+	PageSize int
+	UserId   int64
+}
+
+type OrderGetByUserIdOutput struct {
+	Page     int             `json:"page"`
+	PageSize int             `json:"page_size"`
+	Total    int             `json:"total"`
+	Items    []OrderInfoBase `json:"items"`
+}
