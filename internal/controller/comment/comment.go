@@ -91,3 +91,16 @@ func (c *cComment) CommentGetAvg(ctx context.Context, req *apiComment.CommentGet
 
 	return
 }
+
+func (c *cComment) CommentGetByOrderId(ctx context.Context, req *apiComment.CommentGetByOrderIdReq) (res *apiComment.CommentGetByOrderIdRes, err error) {
+	out, err := service.Comment().GetByOrderId(ctx, model.CommentGetByOrderIdInput{
+		OrderId: req.OrderId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &apiComment.CommentGetByOrderIdRes{
+		CommentInfo: out.CommentInfoBase,
+	}
+	return
+}

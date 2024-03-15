@@ -8,7 +8,8 @@ import (
 	"SheeDrive/utility"
 	"context"
 
-	"github.com/gogf/gf/errors/gerror"
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/os/gtime"
 )
 
 type iComment struct{}
@@ -100,6 +101,13 @@ func (i *iComment) Add(ctx context.Context, in model.CommentAddInput) (out *mode
 	if err != nil {
 		return nil, gerror.New("同一订单不允许被评价多次")
 	}
+	_, err = dao.Order.Ctx(ctx).Where(dao.Order.Columns().Id, in.OrderId).Data(do.Order{
+		Status:      7,
+		CommentTime: gtime.Now(),
+	}).Update()
+	if err != nil {
+		return nil, gerror.New("订单评价失败")
+	}
 	out.Id = id
 
 	return
@@ -126,5 +134,16 @@ func (i *iComment) GetAvg(ctx context.Context, in model.CommentGetAvgInput) (out
 
 	out.Avg = avg
 
+	return
+}
+
+// GetById implements service.IComment.
+func (i *iComment) GetByOrderId(ctx context.Context, in model.CommentGetByOrderIdInput) (out *model.CommentGetByOrderIdOutput, err error) {
+	out = &model.CommentGetByOrderIdOutput{}
+
+	err = dao.Comment.Ctx(ctx).WithAll().Where(dao.Comment.Columns().OrderId, in.OrderId).Scan(&out.CommentInfoBase)
+	if err != nil {
+		return nil, gerror.New("该评论信息不存在")
+	}
 	return
 }

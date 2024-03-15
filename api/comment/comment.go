@@ -60,3 +60,12 @@ type CommentGetAvgReq struct {
 type CommentGetAvgRes struct {
 	Avg float64 `json:"avg" dc:"平均评分"`
 }
+
+type CommentGetByOrderIdReq struct {
+	g.Meta  `path:"/detailByOrderId" method:"get"`
+	OrderId int64 `p:"orderId" v:"required#请输入订单ID"`
+}
+
+type CommentGetByOrderIdRes struct {
+	CommentInfo model.CommentInfoBase `json:"commentInfo" dc:"评论信息"`
+}

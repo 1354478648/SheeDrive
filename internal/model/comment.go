@@ -63,3 +63,11 @@ type CommentGetAvgInput struct {
 type CommentGetAvgOutput struct {
 	Avg float64 `json:"avg"`
 }
+
+type CommentGetByOrderIdInput struct {
+	OrderId int64
+}
+
+type CommentGetByOrderIdOutput struct {
+	CommentInfoBase
+}

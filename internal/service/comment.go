@@ -12,6 +12,7 @@ type IComment interface {
 	Add(ctx context.Context, in model.CommentAddInput) (out *model.CommentAddOutput, err error)
 	Delete(ctx context.Context, in model.CommentDeleteInput) (err error)
 	GetAvg(ctx context.Context, in model.CommentGetAvgInput) (out *model.CommentGetAvgOutput, err error)
+	GetByOrderId(ctx context.Context, in model.CommentGetByOrderIdInput) (out *model.CommentGetByOrderIdOutput, err error)
 }
 
 // 2. 定义接口变量
