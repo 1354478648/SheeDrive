@@ -32,17 +32,6 @@ func (*iMiddleware) Auth(r *ghttp.Request) {
 				Message: "身份验证已过期，请重新登录",
 			}
 		}
-
-		// token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
-		// 	return []byte(consts.JwtTokenKey), nil
-		// })
-
-		// if err != nil || !token.Valid {
-		// 	res = &ghttp.DefaultHandlerResponse{
-		// 		Code:    403,
-		// 		Message: "身份验证已过期，请重新登录",
-		// 	}
-		// }
 	}
 	if res != nil {
 		r.Response.WriteJsonExit(res)
